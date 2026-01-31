@@ -25,7 +25,13 @@
     <script src="{{ asset('assets/js/common.js') }}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <style>
@@ -36,7 +42,8 @@
     #sidenav-main .navbar-collapse {
         overflow-y: auto;
         max-height: calc(100vh - 120px);
-        scrollbar-width: thin; /* Firefox */
+        scrollbar-width: thin;
+        /* Firefox */
     }
 
     /* Chrome / Edge scrollbar */
@@ -208,7 +215,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('discount.index')}}">
+                    <a class="nav-link" href="{{ route('discount.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -236,7 +243,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('summer.index')}}">
+                    <a class="nav-link" href="{{ route('summer.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -292,7 +299,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('store.index')}}">
+                    <a class="nav-link" href="{{ route('store.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -320,7 +327,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('country.index')}}">
+                    <a class="nav-link" href="{{ route('country.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -348,7 +355,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('state.index')}}">
+                    <a class="nav-link" href="{{ route('state.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -376,7 +383,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('district.index')}}">
+                    <a class="nav-link" href="{{ route('district.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -404,7 +411,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('tehsil.index')}}">
+                    <a class="nav-link" href="{{ route('tehsil.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -432,7 +439,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('block.index')}}">
+                    <a class="nav-link" href="{{ route('block.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -460,7 +467,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('village.index')}}">
+                    <a class="nav-link" href="{{ route('village.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -488,7 +495,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('tax.index')}}">
+                    <a class="nav-link" href="{{ route('tax.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -516,7 +523,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('slider.index')}}">
+                    <a class="nav-link" href="{{ route('slider.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
@@ -547,8 +554,8 @@
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
                 </li>
 
-                  <li class="nav-item">
-                    <a class="nav-link  " href="{{route('setting.index')}}">
+                <li class="nav-item">
+                    <a class="nav-link  " href="{{ route('setting.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1"
@@ -579,7 +586,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link  " href="{{route('email_template.index')}}">
+                    <a class="nav-link  " href="{{ route('email_template.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1"

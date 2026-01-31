@@ -93,4 +93,30 @@
             </div>
         </div>
     </div>
+
+    <script>
+    $("#sortable-table").sortable({
+        handle: '.drag-handle',
+        update: function () {
+            let positions = [];
+
+            $("#sortable-table tr").each(function () {
+                positions.push($(this).data('id'));
+            });
+
+            $.ajax({
+                url: "{{ route('summer.updatePosition') }}",
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    positions: positions
+                },
+                success: function (res) {
+                    console.log(res.message);
+                }
+            });
+        }
+    });
+</script>
+
 @endsection

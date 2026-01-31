@@ -14,16 +14,19 @@ class SummerController extends Controller
         $this->summer = new Summer();
     }
 
-    public function index(){
-        $summer = $this->summer->orderBy('id', 'desc')->paginate(config('pagination_limit'));
+    public function index()
+    {
+        $summer = $this->summer->orderBy('position', 'ASC')->paginate(config('pagination_limit'));
         return view('summer.index', compact('summer'));
     }
 
-    public function add(){
+    public function add()
+    {
         return view('summer.add');
     }
 
-    public function save(Request $request){
+    public function save(Request $request)
+    {
         // dd($request->all());
 
         $request->validate([
@@ -83,4 +86,26 @@ class SummerController extends Controller
         return redirect()->back()->with('error', 'Update failed!');
     }
 
+    public function updatePosition(Request $request)
+    {
+        try {
+            $positions = $request->positions;
+
+            foreach ($positions as $index => $id) {
+                Summer::where('id', $id)->update([
+                    'position' => $index + 1
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Position updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

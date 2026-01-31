@@ -18,7 +18,8 @@ class ProductController extends Controller
     public function products()
     {
         try {
-            $data = Summer::with(['products' => function ($query) {
+            $data = Summer::whereNotNull('position')
+            ->whereHas('products')->with(['products' => function ($query) {
                 $query
                     ->leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                     ->leftJoin('brands', 'brands.id', '=', 'products.brands')
@@ -35,8 +36,9 @@ class ProductController extends Controller
                         'brands.name as brand'
                     );
             }])
-                ->select('id', 'name')
-                ->orderBy('created_at', 'DESC')
+                ->select('id', 'name', 'position')
+                ->whereNotNull('position')
+                ->orderBy('position', 'ASC')
                 ->get();
 
             return response()->json([
@@ -167,5 +169,4 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
 }

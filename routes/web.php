@@ -42,7 +42,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
     });
 
     Route::prefix('sub/category')->controller(SubCategoryController::class)->name('sub_category.')->group(function () {
@@ -50,7 +50,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
     });
 
     Route::prefix('brands')->controller(BrandController::class)->name('brand.')->group(function () {
@@ -58,7 +58,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
     });
 
     Route::prefix('discount')->controller(DiscountController::class)->name('discount.')->group(function () {
@@ -66,7 +66,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
     });
 
     Route::prefix('products')->controller(ProductController::class)->name('product.')->group(function () {
@@ -75,16 +75,16 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('status', 'status')->name('status');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
         // Gallery
-        route::get('gallery/{id}', 'gallery')->name('gallery');
-        route::post('gallery_save', 'gallery_save')->name('gallery_save');
-        route::delete('gallery_delete/{id}', 'gallery_delete')->name('gallery_delete');
+        Route::get('gallery/{id}', 'gallery')->name('gallery');
+        Route::post('gallery_save', 'gallery_save')->name('gallery_save');
+        Route::delete('gallery_delete/{id}', 'gallery_delete')->name('gallery_delete');
         // Stock
-        route::get('stock/{id}', 'stock')->name('stock');
-        route::post('stock_save', 'stockSave')->name('stock_save');
-        route::post('select_stock', 'selectStock')->name('select_stock');
-        route::post('summer_status', 'summerStatus')->name('summer_status');
+        Route::get('stock/{id}', 'stock')->name('stock');
+        Route::post('stock_save', 'stockSave')->name('stock_save');
+        Route::post('select_stock', 'selectStock')->name('select_stock');
+        Route::post('summer_status', 'summerStatus')->name('summer_status');
     });
 
     Route::prefix('stores')->controller(StoreController::class)->name('store.')->group(function () {
@@ -92,7 +92,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
     });
 
     Route::prefix('country')->controller(CountryController::class)->name('country.')->group(function () {
@@ -164,8 +164,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
-        route::delete('delete', 'delete')->name('delete');
+        Route::post('update', 'update')->name('update');
+        Route::delete('delete', 'delete')->name('delete');
     });
 
     Route::prefix('email/template')->controller(EmailTemplateController::class)->name('email_template.')->group(function () {
@@ -173,8 +173,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
-        route::delete('delete', 'delete')->name('delete');
+        Route::post('update', 'update')->name('update');
+        Route::delete('delete', 'delete')->name('delete');
     });
 
     Route::prefix('sliders')->controller(SliderController::class)->name('slider.')->group(function () {
@@ -182,9 +182,9 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
-        route::post('status', 'status')->name('status');
-        route::delete('delete/{id}', 'delete')->name('delete');
+        Route::post('update', 'update')->name('update');
+        Route::post('status', 'status')->name('status');
+        Route::delete('delete/{id}', 'delete')->name('delete');
     });
 
     Route::prefix('summer')->controller(SummerController::class)->name('summer.')->group(function () {
@@ -192,7 +192,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
-        route::post('update', 'update')->name('update');
+        Route::post('update', 'update')->name('update');
+        Route::post('update-position', 'updatePosition')->name('updatePosition');
     });
 
 });
