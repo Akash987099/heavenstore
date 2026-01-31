@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SliderController;
+use App\Http\Controllers\Api\ProductController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -22,6 +23,9 @@ Route::get('/brands', [CategoryController::class, 'brands']);
 // Sliders
 
 Route::get('/slider', [SliderController::class, 'slider']);
+Route::get('/products', [ProductController::class, 'products']);
+Route::get('/summer-products/{id}', [ProductController::class, 'summerProducts']);
+Route::get('/all-products', [ProductController::class, 'allProducts']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

@@ -13,7 +13,7 @@ class Summer extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'summer_sale', 'id')
+        return $this->hasMany(Product::class, 'summer_id', 'id')
                     ->where('status', 'active');
     }
     
