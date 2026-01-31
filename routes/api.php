@@ -25,6 +25,7 @@ Route::get('/brands', [CategoryController::class, 'brands']);
 Route::get('/slider', [SliderController::class, 'slider']);
 Route::get('/products', [ProductController::class, 'products']);
 Route::get('/summer-products/{id}', [ProductController::class, 'summerProducts']);
+Route::get('/category-products/{id}', [ProductController::class, 'categoryProducts']);
 Route::get('/all-products', [ProductController::class, 'allProducts']);
 
 Route::middleware('auth:api')->group(function () {

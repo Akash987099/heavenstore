@@ -52,7 +52,6 @@ class ProductController extends Controller
         }
     }
 
-
     public function summerProducts($id)
     {
         try {
@@ -92,7 +91,6 @@ class ProductController extends Controller
         }
     }
 
-
     public function allProducts()
     {
         try {
@@ -130,4 +128,44 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    public function categoryProducts($id)
+    {
+        try {
+            $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
+                ->leftJoin('brands', 'brands.id', '=', 'products.brands')
+                ->where('products.category', $id)
+                ->select(
+                    'products.id',
+                    'products.name',
+                    'products.image',
+                    'products.price',
+                    'products.ac_price',
+                    'products.stock',
+                    'products.in_stock',
+                    'discounts.name as discount',
+                    'brands.name as brand'
+                )
+                ->get();
+
+            if ($products->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'data'   => []
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'data'   => $products
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'data'   => [],
+                'error'  => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }
