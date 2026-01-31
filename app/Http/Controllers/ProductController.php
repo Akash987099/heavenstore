@@ -10,6 +10,7 @@ use App\Models\Discount;
 use App\Models\Product;
 use Milon\Barcode\DNS1D;
 use App\Models\Gallery;
+use App\Models\Summer;
 
 class ProductController extends Controller
 {
@@ -19,6 +20,7 @@ class ProductController extends Controller
     protected $discount;
     protected $product;
     protected $gallery;
+    protected $summer;
 
     public function __construct()
     {
@@ -28,13 +30,15 @@ class ProductController extends Controller
         $this->discount = new Discount();
         $this->product = new Product();
         $this->gallery = new Gallery();
+        $this->summer = new Summer();
     }
 
 
     public function index()
     {
+        $summer = $this->summer->all();
         $products = $this->product->orderBy('id', 'desc')->paginate(config('constants.pagination_limit'));
-        return view('product.index', compact('products'));
+        return view('product.index', compact('products', 'summer'));
     }
 
     public function add()
@@ -357,6 +361,34 @@ class ProductController extends Controller
         }
 
         $product->in_stock = $product->in_stock == 1 ? 0 : 1;
+        $product->save();
+
+        return response()->json([
+            'status'    => 'success',
+        ], 200);
+    }
+
+    public function summerStatus(Request $request){
+        $status = $request->value;
+        $id = $request->id;
+
+        if (empty($id)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'ID not found'
+            ], 400);
+        }
+
+        $product = $this->product->find($id);
+
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Record not found'
+            ], 404);
+        }
+
+        $product->summer_id = $request->status;
         $product->save();
 
         return response()->json([

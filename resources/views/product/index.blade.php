@@ -37,6 +37,8 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Actual Price</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Summer</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Status</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">In Stock</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Stock</th>
@@ -70,6 +72,20 @@
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $item->ac_price }}</p>
+                                        </td>
+
+                                        <td>
+                                            <select name="status" class="form-control text-xs font-weight-bold select_summer">
+                                                <option value="">Select</option>
+                                                @foreach ($summer as $key => $val)
+                                                
+                                                <option value="{{$val->id}}" data-id="{{ $item->id }}"
+                                                    {{ $item->summer_id == $val->id ? 'selected' : '' }}>
+                                                    {{$val->name}}
+                                                </option>
+
+                                                @endforeach
+                                            </select>
                                         </td>
 
                                         <td>
@@ -134,6 +150,32 @@
     </div>
     <script>
         $(document).ready(function() {
+            
+            $('.select_summer').on('change', function() {
+
+                var product_id = $(this).find(':selected').data('id');
+                var value = $(this).val();
+
+                // console.log(product_id, value);
+
+                $.ajax({
+                    url: "{{ route('product.summer_status') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        id: product_id,
+                        status: value,
+                    },
+                    success: function(res) {
+                        console.log(res.message);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        alert('Something went wrong');
+                    }
+                });
+            });
+
             $('.select_top').on('change', function() {
 
                 var product_id = $(this).find(':selected').data('id');

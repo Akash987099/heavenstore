@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Summer extends Model
+{
+    use HasFactory;
+    protected $table = 'summer';
+    protected $fillable = ['id', 'name' , 'sub_name', 'time' , 'created_at', 'updated_at'];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'summer_sale', 'id')
+                    ->where('status', 'active');
+    }
+    
+}

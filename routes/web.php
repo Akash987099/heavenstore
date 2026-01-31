@@ -20,6 +20,7 @@ use App\Http\Controllers\TaxController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\SummerController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'login')->name('login');
@@ -83,6 +84,7 @@ Route::middleware(['auth:admin'])->group(function () {
         route::get('stock/{id}', 'stock')->name('stock');
         route::post('stock_save', 'stockSave')->name('stock_save');
         route::post('select_stock', 'selectStock')->name('select_stock');
+        route::post('summer_status', 'summerStatus')->name('summer_status');
     });
 
     Route::prefix('stores')->controller(StoreController::class)->name('store.')->group(function () {
@@ -183,6 +185,14 @@ Route::middleware(['auth:admin'])->group(function () {
         route::post('update', 'update')->name('update');
         route::post('status', 'status')->name('status');
         route::delete('delete/{id}', 'delete')->name('delete');
+    });
+
+    Route::prefix('summer')->controller(SummerController::class)->name('summer.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        route::post('update', 'update')->name('update');
     });
 
 });

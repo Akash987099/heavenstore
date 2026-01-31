@@ -21,7 +21,7 @@ class SliderController extends Controller
             $sliders = $this->slider
                 ->where('status', 1)
                 ->orderBy('id', 'desc')
-                ->get(['id', 'name', 'image']); // ✅ only required fields
+                ->get(['id', 'name', 'image']);
 
             return response()->json([
                 'status' => true,
