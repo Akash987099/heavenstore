@@ -19,6 +19,7 @@ use App\Http\Controllers\VillageController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EmailTemplateController;
+use App\Http\Controllers\SliderController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'login')->name('login');
@@ -172,6 +173,16 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('edit/{id}', 'edit')->name('edit');
         route::post('update', 'update')->name('update');
         route::delete('delete', 'delete')->name('delete');
+    });
+
+    Route::prefix('sliders')->controller(SliderController::class)->name('slider.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        route::post('update', 'update')->name('update');
+        route::post('status', 'status')->name('status');
+        route::delete('delete/{id}', 'delete')->name('delete');
     });
 
 });

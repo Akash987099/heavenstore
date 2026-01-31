@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Slider;
+
+class SliderController extends Controller
+{
+    protected $slider;
+
+    public function __construct()
+    {
+        $this->slider = new Slider();
+    }
+
+    public function index()
+    {
+        $sliders = $this->slider->orderBy('id', 'desc')->paginate(config('constants.pagination_limit'));
+        return view('slider.index', compact('sliders'));
+    }
+
+    public function add()
+    {
+        return view('slider.add');
+    }
+
+    public  function save(Request $request)
+    {
+        // dd($request->all());
+
+        $request->validate([
+            'title' => 'required',
+            'image' => 'required',
+        ]);
+
+        $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+        $request->file('image')->move(public_path('slider'), $imageName);
+
+        $slider = $this->slider;
+        $slider->name = $request->title;
+        $slider->status = 1;
+        $slider->image = 'slider/' . $imageName;
+        $save = $slider->save();
+
+        if ($save) {
+            return redirect()->back()->with('success', 'Successfully!');
+        }
+        return redirect()->back()->with('error', 'Failed!');
+    }
+
+    public function status(Request $request)
+    {
+        $status = $request->value;
+        $id = $request->id;
+
+        if (empty($id)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'ID not found'
+            ], 400);
+        }
+
+        $slider = $this->slider->find($id);
+
+        if (!$slider) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Record not found'
+            ], 404);
+        }
+
+        $slider->status = $slider->status == '1' ? '0' : '1';
+        $slider->save();
+
+        return response()->json([
+            'status'    => 'success',
+        ], 200);
+    }
+
+    public function edit($id)
+    {
+        // dd($id);
+        if (!$id) {
+            return redirect()->back()->with('error', 'id not found!');
+        }
+
+        $slider = $this->slider->find($id);
+
+        if (!$slider) {
+            return redirect()->back()->with('error', 'Record not found!');
+        }
+
+        return view('slider.edit', compact('slider'));
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id'    => 'required|exists:sliders,id',
+            'title'  => 'required',
+            // 'image' => 'nullable',
+        ]);
+
+        $slider = $this->slider->find($request->id);
+
+        if (!$slider) {
+            return redirect()->back()->with('error', 'Record not found!');
+        }
+
+        $slider->name = $request->title;
+        if ($request->hasFile('image')) {
+
+            if ($slider->image && file_exists(public_path($slider->image))) {
+                unlink(public_path($slider->image));
+            }
+
+            $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('slider'), $imageName);
+
+            $slider->image = 'slider/' . $imageName;
+        }
+
+        if ($slider->save()) {
+            return redirect()->back()->with('success', 'Updated successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Update failed!');
+    }
+
+   public function delete($id)
+{
+    try {
+        $slider = $this->slider->findOrFail($id);
+
+        // 🔥 Image delete from folder
+        if ($slider->image && file_exists(public_path($slider->image))) {
+            unlink(public_path($slider->image));
+        }
+
+        // 🔥 Delete record from DB
+        $slider->delete();
+
+        return response()->json(['status' => 'success']);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'exceptionError',
+            'error'  => $e->getMessage()
+        ], 500);
+    }
+}
+
+
+}
