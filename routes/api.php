@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\PromotionalController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -27,6 +28,8 @@ Route::get('/products', [ProductController::class, 'products']);
 Route::get('/summer-products/{id}', [ProductController::class, 'summerProducts']);
 Route::get('/category-products/{id}', [ProductController::class, 'categoryProducts']);
 Route::get('/all-products', [ProductController::class, 'allProducts']);
+
+Route::get('/promotionals', [PromotionalController::class, 'promotional']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

@@ -21,6 +21,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SummerController;
+use App\Http\Controllers\PromotionalController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'login')->name('login');
@@ -194,6 +195,16 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update', 'update')->name('update');
         Route::post('update-position', 'updatePosition')->name('updatePosition');
+    });
+
+    Route::prefix('promotionals')->controller(PromotionalController::class)->name('promotional.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+        Route::post('status', 'status')->name('status');
+        Route::delete('delete/{id}', 'delete')->name('delete');
     });
 
 });
