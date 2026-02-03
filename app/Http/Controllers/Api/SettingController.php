@@ -33,4 +33,22 @@ class SettingController extends Controller
             'data' => $setting,
         ]);
     }
+
+    public function settings()
+    {
+        try {
+            $setting = $this->setting
+                ->get();
+
+            return response()->json([
+                'status' => true,
+                'data'   => $setting
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'data'   => []
+            ], 500);
+        }
+    }
 }
