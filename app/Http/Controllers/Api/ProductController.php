@@ -24,7 +24,7 @@ class ProductController extends Controller
                     ->leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                     ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                     ->select(
-                        'products.id',
+                        'products.id as url',
                         'products.name',
                         'products.image',
                         'products.price',
@@ -32,7 +32,7 @@ class ProductController extends Controller
                         'products.stock',
                         'products.in_stock',
                         'products.summer_id',
-                        'products.slug as url',
+                        'products.slug',
                         'discounts.name as discount',
                         'brands.name as brand'
                     );
@@ -62,14 +62,14 @@ class ProductController extends Controller
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                 ->where('products.summer_id', $id)
                 ->select(
-                    'products.id',
+                    'products.id as url',
                     'products.name',
                     'products.image',
                     'products.price',
                     'products.ac_price',
                     'products.stock',
                     'products.in_stock',
-                    'products.slug as url',
+                    'products.slug',
                     'discounts.name as discount',
                     'brands.name as brand'
                 )
@@ -101,14 +101,14 @@ class ProductController extends Controller
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                 ->select(
-                    'products.id',
+                    'products.id as url',
                     'products.name',
                     'products.image',
                     'products.price',
                     'products.ac_price',
                     'products.stock',
                     'products.in_stock',
-                    'products.slug as url',
+                    'products.slug',
                     'discounts.name as discount',
                     'brands.name as brand'
                 )
@@ -141,14 +141,14 @@ class ProductController extends Controller
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                 ->where('products.category', $id)
                 ->select(
-                    'products.id',
+                    'products.id as url',
                     'products.name',
                     'products.image',
                     'products.price',
                     'products.ac_price',
                     'products.stock',
                     'products.in_stock',
-                    'products.slug as url',
+                    'products.slug',
                     'discounts.name as discount',
                     'brands.name as brand'
                 )
