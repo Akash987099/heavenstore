@@ -116,6 +116,7 @@ class ProductController extends Controller
         $product->brand_name = $request->brand_name;
         $product->status = $request->status;
         $product->price = $request->price;
+        $product->slug = $request->slug;
         $product->ac_price = $request->ac_price;
         $product->sku_code = $request->sku_code;
         $product->hsn_code = $request->hsn_code;
@@ -182,6 +183,7 @@ class ProductController extends Controller
         $product->sub_category = $request->sub_category;
         $product->discount = $request->discount;
         $product->brands = $request->brand;
+        $product->slug = $request->slug;
         $product->description = $request->description;
 
         if ($request->hasFile('image')) {

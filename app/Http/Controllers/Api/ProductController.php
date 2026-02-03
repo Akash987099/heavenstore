@@ -32,6 +32,7 @@ class ProductController extends Controller
                         'products.stock',
                         'products.in_stock',
                         'products.summer_id',
+                        'products.slug as url',
                         'discounts.name as discount',
                         'brands.name as brand'
                     );
@@ -68,6 +69,7 @@ class ProductController extends Controller
                     'products.ac_price',
                     'products.stock',
                     'products.in_stock',
+                    'products.slug as url',
                     'discounts.name as discount',
                     'brands.name as brand'
                 )
@@ -106,6 +108,7 @@ class ProductController extends Controller
                     'products.ac_price',
                     'products.stock',
                     'products.in_stock',
+                    'products.slug as url',
                     'discounts.name as discount',
                     'brands.name as brand'
                 )
@@ -145,6 +148,7 @@ class ProductController extends Controller
                     'products.ac_price',
                     'products.stock',
                     'products.in_stock',
+                    'products.slug as url',
                     'discounts.name as discount',
                     'brands.name as brand'
                 )

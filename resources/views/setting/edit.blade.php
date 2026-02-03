@@ -34,7 +34,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="vehicle_name" class="form-label">Media Link</label>
-                                    <input type="url" class="form-control" id="media_link" name="media_link"
+                                    <input type="url" class="form-control" id="media_link" name="media_link" value="{{$setting->media_link}}"
                                         placeholder="Enter Details"
                                         required>
                                 </div>

@@ -24,6 +24,15 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="vehicle_name" class="form-label">Slug</label>
+                                    <input type="text" class="form-control" id="slug" name="slug" value="{{$product->slug}}"
+                                        placeholder="Enter Details" oninput="this.value = this.value.replace(/\s+/g, '')"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="vehicle_number" class="form-label">Image</label>
                                     <input type="file" class="form-control" id="image" name="image" placeholder="Enter Details">
                                 </div>

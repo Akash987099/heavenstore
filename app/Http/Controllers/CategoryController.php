@@ -38,6 +38,7 @@ class CategoryController extends Controller
 
         $category = $this->category;
         $category->name = $request->name;
+        $category->slug = $request->slug;
         $category->image = 'category/' . $imageName;
         $save = $category->save();
 
@@ -78,6 +79,7 @@ class CategoryController extends Controller
         }
 
         $category->name = $request->name;
+        $category->slug = $request->slug;
 
         if ($request->hasFile('image')) {
 
