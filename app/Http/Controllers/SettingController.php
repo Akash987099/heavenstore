@@ -36,6 +36,7 @@ class SettingController extends Controller
         $setting = $this->setting;
         $setting->name = $request->name;
         $setting->slug = $request->slug;
+        $setting->media_link = $request->media_link;
         $setting->description = $request->description;
 
         if ($request->hasFile('image')) {
@@ -83,7 +84,8 @@ class SettingController extends Controller
         }
 
         $setting->name = $request->name;
-        // $setting->slug = $request->slug;
+        $setting->slug = $request->slug;
+        $setting->media_link = $request->media_link;
         $setting->description = $request->description;
 
         if ($request->hasFile('image')) {
