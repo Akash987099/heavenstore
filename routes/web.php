@@ -22,6 +22,7 @@ use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SummerController;
 use App\Http\Controllers\PromotionalController;
+use App\Http\Controllers\CMSController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'login')->name('login');
@@ -198,6 +199,16 @@ Route::middleware(['auth:admin'])->group(function () {
     });
 
     Route::prefix('promotionals')->controller(PromotionalController::class)->name('promotional.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+        Route::post('status', 'status')->name('status');
+        Route::delete('delete/{id}', 'delete')->name('delete');
+    });
+
+    Route::prefix('cms')->controller(CMSController::class)->name('cms.')->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');

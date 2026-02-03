@@ -128,27 +128,23 @@ class SliderController extends Controller
         return redirect()->back()->with('error', 'Update failed!');
     }
 
-   public function delete($id)
-{
-    try {
-        $slider = $this->slider->findOrFail($id);
+    public function delete($id)
+    {
+        try {
+            $slider = $this->slider->findOrFail($id);
 
-        // 🔥 Image delete from folder
-        if ($slider->image && file_exists(public_path($slider->image))) {
-            unlink(public_path($slider->image));
+            if ($slider->image && file_exists(public_path($slider->image))) {
+                unlink(public_path($slider->image));
+            }
+
+            $slider->delete();
+
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'exceptionError',
+                'error'  => $e->getMessage()
+            ], 500);
         }
-
-        // 🔥 Delete record from DB
-        $slider->delete();
-
-        return response()->json(['status' => 'success']);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'exceptionError',
-            'error'  => $e->getMessage()
-        ], 500);
     }
-}
-
-
 }
