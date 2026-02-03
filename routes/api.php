@@ -42,6 +42,7 @@ Route::get('/cms', [CmsController::class, 'cms']);
 
 // Settings
 Route::get('/setting/{name}', [SettingController::class, 'setting']);
+Route::get('/settings', [SettingController::class, 'settings']);
 
 // Authenticate Page
 Route::middleware('auth:api')->group(function () {
