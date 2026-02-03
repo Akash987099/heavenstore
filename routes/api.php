@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PromotionalController;
 use App\Http\Controllers\Api\CmsController;
+use App\Http\Controllers\Api\SettingController;
+use App\Models\Setting;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -37,6 +39,9 @@ Route::get('/promotionals', [PromotionalController::class, 'promotional']);
 
 // CMS
 Route::get('/cms', [CmsController::class, 'cms']);
+
+// Settings
+Route::get('/setting/{name}', [SettingController::class, 'setting']);
 
 // Authenticate Page
 Route::middleware('auth:api')->group(function () {

@@ -161,7 +161,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::delete('delete/{id}', 'delete')->name('delete');
     });
 
-    Route::prefix('setting')->controller(SettingController::class)->name('setting.')->group(function () {
+    Route::prefix('settings')->controller(SettingController::class)->name('setting.')->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');

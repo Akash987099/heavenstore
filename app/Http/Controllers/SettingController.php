@@ -99,7 +99,7 @@ class SettingController extends Controller
         }
 
         if ($setting->save()) {
-            return redirect()->back()->with('success', 'Category updated successfully!');
+            return redirect()->back()->with('success', 'Updated successfully!');
         }
 
         return redirect()->back()->with('error', 'Update failed!');
