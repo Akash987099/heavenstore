@@ -70,7 +70,7 @@ class ProductController extends Controller
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                 ->where('products.summer_id', $id)
                 ->select(
-                    'products.id as url',
+                    'products.id',
                     'products.name',
                     'products.image',
                     'products.price',
@@ -83,11 +83,9 @@ class ProductController extends Controller
                 )
                 ->get();
 
-            $products->each(function ($summer) {
-                $summer->products->each(function ($product) {
-                    $product->url = Str::slug($product->name) . '-' . $product->url;
-                    unset($product->id);
-                });
+            $products->each(function ($product) {
+                $product->url = Str::slug($product->name) . '-' . $product->id;
+                unset($product->id);
             });
 
             if ($products->isEmpty()) {
