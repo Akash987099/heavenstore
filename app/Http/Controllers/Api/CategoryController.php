@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Brand;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -54,7 +55,7 @@ class CategoryController extends Controller
                 'subCategories' => $cat->subCategories->map(function ($sub) {
                     return [
                         'id' => $sub->id,
-                        'category_id' => $sub->category_id,
+                        'category_id' => Str::slug($sub->name) . '-' . $sub->category_id,
                         'name' => $sub->name,
                         'image' => $sub->image,
                     ];
@@ -62,6 +63,12 @@ class CategoryController extends Controller
             ];
         })->values();
         
+        $data->each(function ($summer) {
+                $summer->products->each(function ($product) {
+                    $product->url = Str::slug($product->name) . '-' . $product->url;
+                    unset($product->id);
+                });
+            });
         // dd($data);
     
         return response()->json([

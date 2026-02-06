@@ -34,6 +34,7 @@ class ProductController extends Controller
                             'products.in_stock',
                             'products.summer_id',
                             'products.slug',
+                            'products.slug',
                             'discounts.name as discount',
                             'brands.name as brand'
                         );
