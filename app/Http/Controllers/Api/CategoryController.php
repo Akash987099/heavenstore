@@ -48,32 +48,30 @@ class CategoryController extends Controller
     public function categorySubcategory()
     {
         // echo '1111';exit();
-        $categories = Category::with('subCategories:id,category_id,name,image')
+        $categories = Category::whereHas('subCategories')
+            ->with('subCategories:id,category_id,name,image')
             ->select('id', 'name', 'image')
-            // ->orderBy('position','ASC')
             ->get();
 
         $data = $categories->map(function ($cat) {
             return [
-                'url' => Str::slug($cat->name) . '-' . $cat->id,
-                'name' => $cat->name,
+                'url'   => Str::slug($cat->name) . '-' . $cat->id,
+                'name'  => $cat->name,
                 'image' => $cat->image,
                 'subCategories' => $cat->subCategories->map(function ($sub) {
                     return [
-                        'url' => Str::slug($sub->name) . '-' . $sub->category_id,
-                        'name' => $sub->name,
+                        'url'   => Str::slug($sub->name) . '-' . $sub->id,
+                        'name'  => $sub->name,
                         'image' => $sub->image,
                     ];
                 })->values(),
             ];
         })->values();
 
-        // dd($data);
-
         return response()->json([
             'status' => true,
-            'data' => $data,
-        ]);
+            'data'   => $data,
+        ],200);
     }
 
     public function subCategory($id = null)
