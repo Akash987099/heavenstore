@@ -114,7 +114,7 @@ class ProductController extends Controller
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                 ->select(
-                    'products.id as url',
+                    'products.id',
                     'products.name',
                     'products.image',
                     'products.price',
@@ -126,6 +126,11 @@ class ProductController extends Controller
                     'brands.name as brand'
                 )
                 ->get();
+
+            $products->each(function ($product) {
+                $product->url = Str::slug($product->name) . '-' . $product->id;
+                unset($product->id);
+            });
 
             if ($products->isEmpty()) {
                 return response()->json([
@@ -166,6 +171,11 @@ class ProductController extends Controller
                     'brands.name as brand'
                 )
                 ->get();
+
+            $products->each(function ($product) {
+                $product->url = Str::slug($product->name) . '-' . $product->id;
+                unset($product->id);
+            });
 
             if ($products->isEmpty()) {
                 return response()->json([
