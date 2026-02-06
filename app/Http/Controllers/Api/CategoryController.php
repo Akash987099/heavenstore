@@ -26,12 +26,18 @@ class CategoryController extends Controller
     {
         $category = $this->category->select('id', 'name', 'image')->get();
 
+
         if (!$category) {
             return response()->json([
                 'status' => false,
                 'message' => 'No record found!.'
             ], 403);
         }
+
+        $category->each(function ($cat) {
+            $cat->url = Str::slug($cat->name) . '-' . $cat->id;
+            unset($cat->id);
+        });
 
         return response()->json([
             'status' => true,
@@ -43,28 +49,27 @@ class CategoryController extends Controller
     {
         // echo '1111';exit();
         $categories = Category::with('subCategories:id,category_id,name,image')
-            ->select('id','name','image')
+            ->select('id', 'name', 'image')
             // ->orderBy('position','ASC')
             ->get();
-    
+
         $data = $categories->map(function ($cat) {
             return [
-                'id' => $cat->id,
+                'url' => Str::slug($cat->name) . '-' . $cat->id,
                 'name' => $cat->name,
                 'image' => $cat->image,
                 'subCategories' => $cat->subCategories->map(function ($sub) {
                     return [
-                        'id' => $sub->id,
-                        'category_id' => Str::slug($sub->name) . '-' . $sub->category_id,
+                        'url' => Str::slug($sub->name) . '-' . $sub->category_id,
                         'name' => $sub->name,
                         'image' => $sub->image,
                     ];
                 })->values(),
             ];
         })->values();
-        
+
         // dd($data);
-    
+
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -89,6 +94,11 @@ class CategoryController extends Controller
             ], 404);
         }
 
+        $subcategory->each(function ($cat) {
+            $cat->url = Str::slug($cat->name) . '-' . $cat->id;
+            unset($cat->id);
+        });
+
         return response()->json([
             'status' => true,
             'data' => $subcategory
@@ -105,6 +115,11 @@ class CategoryController extends Controller
                 'message' => 'No record found!.'
             ], 403);
         }
+
+        $brands->each(function ($cat) {
+            $cat->url = Str::slug($cat->name) . '-' . $cat->id;
+            unset($cat->id);
+        });
 
         return response()->json([
             'status' => true,
