@@ -19,7 +19,7 @@ class PromotionalController extends Controller
     {
         $promo = $this->promo
             ->select('name', 'url_link', 'image')
-            ->wgere('status', 1)
+            // ->wgere('status', 1)
             ->orderBy('position', 'desc')
             ->get();
 
