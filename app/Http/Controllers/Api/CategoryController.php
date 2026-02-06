@@ -63,12 +63,6 @@ class CategoryController extends Controller
             ];
         })->values();
         
-        $data->each(function ($summer) {
-                $summer->products->each(function ($product) {
-                    $product->url = Str::slug($product->name) . '-' . $product->url;
-                    unset($product->id);
-                });
-            });
         // dd($data);
     
         return response()->json([
