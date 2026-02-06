@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="card-body px-4 pt-4 pb-2">
-                    <form action="{{ route('summer.update') }}" method="POST">
+                    <form action="{{ route('summer.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="id" value="{{$summer->id}}">
                         <div class="row g-3">
@@ -35,6 +35,27 @@
                                 <div class="form-group">
                                     <label class="form-label">Time</label>
                                     <input type="time" class="form-control" name="time" value="{{$summer->time}}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Image</label>
+                                    <input type="file" class="form-control" name="image">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicle_number" class="form-label fw-semibold mb-2">
+                                        Old Image
+                                    </label>
+
+                                    <div class="border rounded-3 p-3 text-center bg-light position-relative">
+                                        <img src="{{ asset($summer->image) }}" alt="Old Image"
+                                            class="img-fluid rounded-3 shadow-sm"
+                                            style="max-height: 200px; object-fit: contain;">
+                                    </div>
                                 </div>
                             </div>
 

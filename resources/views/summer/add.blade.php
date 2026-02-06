@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="card-body px-4 pt-4 pb-2">
-                    <form action="{{ route('summer.save') }}" method="POST">
+                    <form action="{{ route('summer.save') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row g-3">
@@ -35,6 +35,14 @@
                                 <div class="form-group">
                                     <label class="form-label">Time</label>
                                     <input type="time" class="form-control" name="time" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Image</label>
+                                    <input type="file" class="form-control" name="image" placeholder="Enter name"
+                                        required>
                                 </div>
                             </div>
 

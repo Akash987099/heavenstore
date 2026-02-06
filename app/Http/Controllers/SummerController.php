@@ -35,7 +35,12 @@ class SummerController extends Controller
         ]);
 
         $summer = $this->summer;
+
+        $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+        $request->file('image')->move(public_path('summer'), $imageName);
+
         $summer->name = $request->name;
+        $summer->image = 'summer/' . $imageName;
         $summer->sub_name = $request->title;
         $summer->time = $request->time;
         $save = $summer->save();
@@ -73,6 +78,18 @@ class SummerController extends Controller
 
         if (!$summer) {
             return redirect()->back()->with('error', 'Record not found!');
+        }
+
+        if ($request->hasFile('image')) {
+
+            if ($summer->image && file_exists(public_path($summer->image))) {
+                unlink(public_path($summer->image));
+            }
+
+            $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('summer'), $imageName);
+
+            $summer->image = 'summer/' . $imageName;
         }
 
         $summer->name = $request->name;

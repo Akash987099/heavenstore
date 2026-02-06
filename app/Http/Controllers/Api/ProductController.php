@@ -37,7 +37,7 @@ class ProductController extends Controller
                         'brands.name as brand'
                     );
             }])
-                ->select('id', 'name', 'position')
+                ->select('id', 'name', 'position', 'banner')
                 ->whereNotNull('position')
                 ->orderBy('position', 'ASC')
                 ->get();

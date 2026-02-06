@@ -9,7 +9,7 @@ class Summer extends Model
 {
     use HasFactory;
     protected $table = 'summer';
-    protected $fillable = ['id', 'name' , 'sub_name', 'position', 'time', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'name' , 'sub_name', 'position', 'time', 'image', 'created_at', 'updated_at'];
 
     public function products()
     {
