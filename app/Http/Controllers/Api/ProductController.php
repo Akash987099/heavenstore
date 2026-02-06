@@ -159,7 +159,7 @@ class ProductController extends Controller
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
                 ->where('products.category', $id)
                 ->select(
-                    'products.id as url',
+                    'products.id',
                     'products.name',
                     'products.image',
                     'products.price',
