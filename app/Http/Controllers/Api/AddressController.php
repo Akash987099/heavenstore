@@ -174,4 +174,34 @@ class AddressController extends Controller
             'message' => 'Address deleted successfully',
         ], 200);
     }
+
+    public function userAddress(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Validation error',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $address = $this->address->where('user_id', $request->user_id)->get();
+
+        if(!$address){
+            return response()->json([
+                'statis' => false,
+                'message' => 'no record found!'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Success!',
+            'data'   => $address
+        ]);
+    }
 }

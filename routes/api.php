@@ -62,4 +62,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/add-new-address', [AddressController::class, 'addAddress']);
     Route::post('/update-address', [AddressController::class, 'updateAddress']);
     Route::post('/delete-address', [AddressController::class, 'deleteAddress']);
+    Route::post('/user-address', [AddressController::class, 'userAddress']);
 });
