@@ -10,7 +10,8 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PromotionalController;
 use App\Http\Controllers\Api\CmsController;
 use App\Http\Controllers\Api\SettingController;
-use App\Models\Setting;
+use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\SupportController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -45,10 +46,18 @@ Route::get('/cms', [CmsController::class, 'cms']);
 Route::get('/setting/{name}', [SettingController::class, 'setting']);
 Route::get('/settings', [SettingController::class, 'settings']);
 
+// Support
+Route::get('/support/country', [SupportController::class, 'country']);
+Route::get('/support/state/{countryID}', [SupportController::class, 'state']);
+Route::get('/support/district/{stateID}', [SupportController::class, 'district']);
+Route::get('/support/tehsil/{districtID}', [SupportController::class, 'tehsil']);
+Route::get('/support/block/{tehsilID}', [SupportController::class, 'block']);
+Route::get('/support/village/{blockID}', [SupportController::class, 'village']);
+
 // Authenticate Page
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // address
-    Route::post('/add/address', [UserController::class, 'addAddress']);
+    Route::post('/add-new-address', [AddressController::class, 'addAddress']);
 });
