@@ -24,7 +24,7 @@ class CategoryController extends Controller
 
     public function category()
     {
-        $category = $this->category->orderBy('postion', 'asc')->select('id', 'name', 'image')->get();
+        $category = $this->category->orderBy('position', 'asc')->select('id', 'name', 'image')->get();
 
 
         if (!$category) {
@@ -50,7 +50,7 @@ class CategoryController extends Controller
         // echo '1111';exit();
         $categories = Category::whereHas('subCategories')
             ->with('subCategories:id,category_id,name,image')
-            ->orderBy('postion', 'asc')
+            ->orderBy('position', 'asc')
             ->select('id', 'name', 'image')
             ->get();
 
