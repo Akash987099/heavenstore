@@ -12,6 +12,7 @@ use App\Models\Product;
 use Milon\Barcode\DNS1D;
 use App\Models\Gallery;
 use App\Models\Summer;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -196,5 +197,85 @@ class ProductController extends Controller
                 'error'  => $e->getMessage()
             ], 500);
         }
+    }
+
+    // Product Details 
+    public function productsDetails($name)
+    {
+        preg_match('/(\d+)/', $name, $matches);
+
+        $id = $matches[1] ?? null;
+
+        $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock')->first();
+
+        // dd($product);
+
+        if (!$product) {
+            return response()->json([
+                'status' => false,
+                'data'   => []
+            ], 404);
+        }
+
+        $similar = $product->similar;
+
+        // dd($similar);
+
+        if (empty($similar) && $similar == null) {
+            $similarProducts = $this->categorySubcategoryProducts($product->category, $product->sub_category);
+        } else {
+            $similarProducts = $this->similarProducts($similar);
+        }
+
+        $category = Category::find($product->category);
+        $product->category = $category ? Str::slug($category->name) : null;
+        $product->category_url = $category
+            ? Str::slug($category->name) . '-' . $category->id
+            : null;
+
+        $sub_category = SubCategory::find($product->sub_category);
+        $product->sub_category = $sub_category ? Str::slug($sub_category->name) : null;
+        $product->sub_category_url = $sub_category
+            ? Str::slug($sub_category->name) . '-' . $sub_category->id
+            : null;
+
+        $gallery = Gallery::where('product_id', $id)->select('image')->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'data'   => $product,
+            'gallery' => $gallery,
+            'similar_products' => $similarProducts
+        ], 200);
+    }
+
+    private function similarProducts($ids)
+    {
+        $idsArray = json_decode($ids, true);
+
+        if (empty($idsArray)) {
+            return collect();
+        }
+
+        $products = Product::whereIn('id', $idsArray)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description', 'barcode_base as barcode')->get();
+        $products->each(function ($product) {
+            $product->url = Str::slug($product->name) . '-' . $product->id;
+            unset($product->id);
+        });
+
+        return $products;
+    }
+
+    private function categorySubcategoryProducts($category, $subcategory)
+    {
+        $products = Product::where('category', $category)->orWhere('sub_category', $subcategory)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description', 'barcode_base as barcode')->get();
+
+        $products->each(function ($product) {
+            $product->url = Str::slug($product->name) . '-' . $product->id;
+            unset($product->id);
+        });
+
+        return $products;
     }
 }

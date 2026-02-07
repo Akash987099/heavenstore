@@ -33,6 +33,7 @@ Route::get('/products', [ProductController::class, 'products']);
 Route::get('/summer-products/{id}', [ProductController::class, 'summerProducts']);
 Route::get('/category-products/{id}', [ProductController::class, 'categoryProducts']);
 Route::get('/all-products', [ProductController::class, 'allProducts']);
+Route::get('/products/{url}', [ProductController::class, 'productsDetails']);
 
 // Promotional
 Route::get('/promotionals', [PromotionalController::class, 'promotional']);

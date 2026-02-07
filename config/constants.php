@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'pagination_limit' => 10,
+    'pagination_limit' => 100,
 ];

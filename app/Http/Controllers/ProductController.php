@@ -370,7 +370,8 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function summerStatus(Request $request){
+    public function summerStatus(Request $request)
+    {
         $status = $request->value;
         $id = $request->id;
 
@@ -396,5 +397,53 @@ class ProductController extends Controller
         return response()->json([
             'status'    => 'success',
         ], 200);
+    }
+
+    // Similar
+
+    public function similar($id)
+    {
+        if (!$id) {
+            return redirect()->back()->with('error', 'id not found!');
+        }
+
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Record not found!');
+        }
+
+        $products = Product::select('id', 'name')
+            ->where('id', '!=', $id)
+            ->get();
+
+        $selectedSimilar = $product->similar
+            ? json_decode($product->similar, true)
+            : [];
+
+        return view('product.similar', compact(
+            'id',
+            'products',
+            'selectedSimilar'
+        ));
+    }
+
+    public function saveSimilar(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'similar_products' => 'nullable|array',
+        ]);
+
+        $product = Product::find($request->product_id);
+
+        $product->similar = !empty($request->similar_products)
+            ? json_encode($request->similar_products)
+            : null;
+
+        $product->save();
+
+        return redirect()->back()
+            ->with('success', 'Similar products updated successfully!');
     }
 }

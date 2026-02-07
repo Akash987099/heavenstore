@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recommended extends Model
 {
-    use HasFactory;
-
     protected $table = 'recommended_products';
+    protected $fillable = ['product_id', 'recommended_product_id'];
 
-    protected $fillable = [
-        'product_id',
-        'recommended_product_id'
-    ];
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

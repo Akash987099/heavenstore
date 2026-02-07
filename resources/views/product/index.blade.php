@@ -43,6 +43,7 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">In Stock</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Stock</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Gallery</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Similar</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
                                 </tr>
                             </thead>
@@ -127,6 +128,13 @@
                                             <a href="{{ route('product.gallery', $item->id) }}"
                                                 class="text-xs font-weight-bold mb-0">
                                                 Gallery
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ route('product.similar', $item->id) }}"
+                                                class="text-xs font-weight-bold mb-0">
+                                                Similar
                                             </a>
                                         </td>
 
