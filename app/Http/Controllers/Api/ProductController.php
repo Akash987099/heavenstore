@@ -202,9 +202,9 @@ class ProductController extends Controller
     // Product Details 
     public function productsDetails($name)
     {
-        preg_match('/(\d+)/', $name, $matches);
+        preg_match_all('/\d+/', $name, $matches);
 
-        $id = $matches[1] ?? null;
+        $id = !empty($matches[0]) ? end($matches[0]) : null;
 
         $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock')->first();
 
