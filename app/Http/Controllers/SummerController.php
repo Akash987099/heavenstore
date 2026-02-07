@@ -36,11 +36,15 @@ class SummerController extends Controller
 
         $summer = $this->summer;
 
-        $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-        $request->file('image')->move(public_path('summer'), $imageName);
+         if ($request->hasFile('image')) {
+
+            $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('summer'), $imageName);
+
+            $summer->image = 'summer/' . $imageName;
+        }
 
         $summer->name = $request->name;
-        $summer->image = 'summer/' . $imageName;
         $summer->sub_name = $request->title;
         $summer->time = $request->time;
         $save = $summer->save();

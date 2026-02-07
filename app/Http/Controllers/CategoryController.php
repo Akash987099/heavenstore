@@ -16,7 +16,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $category = $this->category->orderBy('id', 'desc')->paginate(config('constants.pagination_limit'));
+        $category = $this->category->orderBy('position', 'asc')->paginate(config('constants.pagination_limit'));
         return view('category.index', compact('category'));
     }
 
@@ -100,4 +100,16 @@ class CategoryController extends Controller
         return redirect()->back()->with('error', 'Update failed!');
     }
 
+    public function updatePosition(Request $request)
+    {
+        foreach ($request->positions as $index => $id) {
+            Category::where('id', $id)->update([
+                'position' => $index + 1
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Category order updated successfully'
+        ]);
+    }
 }

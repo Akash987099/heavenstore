@@ -29,7 +29,7 @@
                                     <th class="text-secondary opacity-7">Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="sortable-table">
+                            <tbody id="sortable-category">
                                 @foreach ($category as $key => $item)
                                     <tr data-id="{{ $item->id }}">
                                         <td>
@@ -50,6 +50,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                         <div class="mt-4">
                             {{ $category->links('pagination::tailwind') }}
@@ -59,5 +60,30 @@
             </div>
         </div>
     </div>
-    
+
+    <script>
+        $("#sortable-category").sortable({
+            handle: '.drag-handle',
+            update: function() {
+
+                let positions = [];
+
+                $("#sortable-category tr").each(function() {
+                    positions.push($(this).data('id'));
+                });
+
+                $.ajax({
+                    url: "{{ route('category.updatePosition') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        positions: positions
+                    },
+                    success: function(res) {
+                        console.log(res.message);
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

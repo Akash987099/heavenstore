@@ -46,6 +46,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('save', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update', 'update')->name('update');
+        Route::post('update-position', 'updatePosition')->name('updatePosition');
     });
 
     Route::prefix('sub/category')->controller(SubCategoryController::class)->name('sub_category.')->group(function () {
@@ -190,7 +191,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::delete('delete/{id}', 'delete')->name('delete');
     });
 
-    Route::prefix('summer')->controller(SummerController::class)->name('summer.')->group(function () {
+    Route::prefix('summers')->controller(SummerController::class)->name('summer.')->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
