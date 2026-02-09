@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -78,6 +79,8 @@ class CartController extends Controller
             ->whereNull('order_id')
             ->first();
 
+        $product = Product::where('id', $request->product_id)->first();
+
         if ($request->type === 'add') {
 
             if ($cart) {
@@ -100,6 +103,8 @@ class CartController extends Controller
                     'cart_id' => $cart->id,
                     'qty'     => $cart->qty,
                     'price'   => $cart->price,
+                    'name' => $product->name,
+                    'image' => $product->image,
                 ]
             ], 200);
         }
@@ -138,6 +143,8 @@ class CartController extends Controller
                     'cart_id' => $cart->id,
                     'qty'     => $cart->qty,
                     'price'   => $cart->price,
+                    'name' => $product->name,
+                    'image' => $product->image,
                 ]
             ], 200);
         }
@@ -180,6 +187,8 @@ class CartController extends Controller
                     'cart_id' => $cart->id,
                     'qty'     => $cart->qty,
                     'price'   => $cart->price,
+                    'name' => $product->name,
+                    'image' => $product->image,
                 ]
             ], 200);
         }
