@@ -19,7 +19,7 @@ class AddressController extends Controller
     public function addAddress(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'user_id'     => 'required|integer',
+            'user_id'     => 'required|integer|exists:users,id',
             'country'     => 'required|string',
             'state'       => 'required|string',
             'district'    => 'required|string',
@@ -191,7 +191,7 @@ class AddressController extends Controller
 
         $address = $this->address->where('user_id', $request->user_id)->get();
 
-        if(!$address){
+        if (!$address) {
             return response()->json([
                 'statis' => false,
                 'message' => 'no record found!'
@@ -203,5 +203,43 @@ class AddressController extends Controller
             'message' => 'Success!',
             'data'   => $address
         ]);
+    }
+
+    public function changeAddress(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id'    => 'required|integer',
+            'address_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Validation error',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $address = Address::where('id', $request->address_id)
+            ->where('user_id', $request->user_id)
+            ->first();
+
+        if (!$address) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Address not found',
+            ], 404);
+        }
+
+        Address::where('user_id', $request->user_id)
+            ->update(['is_default' => 0]);
+
+        $address->update(['is_default' => 1]);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Default address changed successfully',
+            'data'    => $address
+        ], 200);
     }
 }

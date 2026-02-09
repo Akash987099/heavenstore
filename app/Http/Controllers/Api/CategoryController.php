@@ -26,7 +26,6 @@ class CategoryController extends Controller
     {
         $category = $this->category->orderBy('position', 'asc')->select('id', 'name', 'image')->get();
 
-
         if (!$category) {
             return response()->json([
                 'status' => false,

@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\CmsController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\SupportController;
+use App\Http\Controllers\Api\CartController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -63,4 +64,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/update-address', [AddressController::class, 'updateAddress']);
     Route::delete('/delete-address', [AddressController::class, 'deleteAddress']);
     Route::get('/user-address', [AddressController::class, 'userAddress']);
+    Route::get('/change-address', [AddressController::class, 'changeAddress']);
+
+    Route::prefix('cart')->controller(CartController::class)->group(function(){
+        Route::get('/', 'index');
+        Route::post('/add', 'add');
+        Route::get('/remove', 'remove');
+    });
 });
