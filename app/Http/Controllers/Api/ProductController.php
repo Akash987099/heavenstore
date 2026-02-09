@@ -208,8 +208,6 @@ class ProductController extends Controller
 
         $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock', 'barcode_base as barcode')->first();
 
-        // dd($product);
-
         if (!$product) {
             return response()->json([
                 'status' => false,
