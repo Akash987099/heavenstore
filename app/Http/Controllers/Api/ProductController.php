@@ -217,8 +217,6 @@ class ProductController extends Controller
 
         $similar = $product->similar;
 
-        // dd($similar);
-
         if (empty($similar) && $similar == null) {
             $similarProducts = $this->categorySubcategoryProducts($product->category, $product->sub_category);
         } else {
