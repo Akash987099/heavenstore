@@ -206,7 +206,7 @@ class ProductController extends Controller
 
         $id = !empty($matches[0]) ? end($matches[0]) : null;
 
-        $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock')->first();
+        $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock', 'barcode_base as barcode')->first();
 
         // dd($product);
 
@@ -258,7 +258,7 @@ class ProductController extends Controller
             return collect();
         }
 
-        $products = Product::whereIn('id', $idsArray)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description', 'barcode_base as barcode')->get();
+        $products = Product::whereIn('id', $idsArray)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
         $products->each(function ($product) {
             $product->url = Str::slug($product->name) . '-' . $product->id;
             unset($product->id);
@@ -269,7 +269,7 @@ class ProductController extends Controller
 
     private function categorySubcategoryProducts($category, $subcategory)
     {
-        $products = Product::where('category', $category)->orWhere('sub_category', $subcategory)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description', 'barcode_base as barcode')->get();
+        $products = Product::where('category', $category)->orWhere('sub_category', $subcategory)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
 
         $products->each(function ($product) {
             $product->url = Str::slug($product->name) . '-' . $product->id;
