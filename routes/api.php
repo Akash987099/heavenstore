@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\WishlistController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -67,6 +68,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/change-address', [AddressController::class, 'changeAddress']);
 
     Route::prefix('cart')->controller(CartController::class)->group(function(){
+        Route::get('/', 'index');
+        Route::post('/add', 'add');
+        Route::get('/remove', 'remove');
+    });
+
+    Route::prefix('wishlist')->controller(WishlistController::class)->group(function(){
         Route::get('/', 'index');
         Route::post('/add', 'add');
         Route::get('/remove', 'remove');
