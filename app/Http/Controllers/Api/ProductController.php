@@ -154,8 +154,12 @@ class ProductController extends Controller
         }
     }
 
-    public function categoryProducts($id)
+    public function categoryProducts($name)
     {
+
+        preg_match_all('/\d+/', $name, $matches);
+
+        $id = !empty($matches[0]) ? end($matches[0]) : null;
         try {
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands')
