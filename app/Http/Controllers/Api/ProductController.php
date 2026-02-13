@@ -254,11 +254,25 @@ class ProductController extends Controller
     {
         $idsArray = json_decode($ids, true);
 
-        if (empty($idsArray)) {
+        if (empty($idsArray) || !is_array($idsArray)) {
             return collect();
         }
 
-        $products = Product::where('id', '!=', $id)->whereIn('id', $idsArray)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
+        $products = Product::whereIn('id', $idsArray)
+            ->where('id', '!=', $id) // ✅ current product exclude
+            ->select(
+                'id',
+                'name',
+                'sku_code as sku',
+                'brand_name',
+                'image',
+                'price',
+                'ac_price',
+                'hsn_code as hsn',
+                'description'
+            )
+            ->get();
+
         $products->each(function ($product) {
             $product->url = Str::slug($product->name) . '-' . $product->id;
             unset($product->id);
@@ -269,7 +283,23 @@ class ProductController extends Controller
 
     private function categorySubcategoryProducts($category, $subcategory, $id)
     {
-        $products = Product::where('id', '!=', $id)->where('category', $category)->orWhere('sub_category', $subcategory)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
+        $products = Product::where('id', '!=', $id)
+            ->where(function ($query) use ($category, $subcategory) {
+                $query->where('category', $category)
+                    ->orWhere('sub_category', $subcategory);
+            })
+            ->select(
+                'id',
+                'name',
+                'sku_code as sku',
+                'brand_name',
+                'image',
+                'price',
+                'ac_price',
+                'hsn_code as hsn',
+                'description'
+            )
+            ->get();
 
         $products->each(function ($product) {
             $product->url = Str::slug($product->name) . '-' . $product->id;
