@@ -33,7 +33,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="vehicle_number" class="form-label">Category Image</label>
-                                    <input type="file" class="form-control" id="image" name="image" placeholder="Enter vehicle number" required>
+                                    <input type="file" class="form-control" id="image" name="image" placeholder="Enter vehicle number">
                                 </div>
                             </div>
                         </div>

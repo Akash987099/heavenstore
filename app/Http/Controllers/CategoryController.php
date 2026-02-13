@@ -33,13 +33,18 @@ class CategoryController extends Controller
             'image' => 'required|image',
         ]);
 
-        $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-        $request->file('image')->move(public_path('category'), $imageName);
-
         $category = $this->category;
         $category->name = $request->name;
         $category->slug = $request->slug;
-        $category->image = 'category/' . $imageName;
+
+        if ($request->hasFile('image')) {
+
+            $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('category'), $imageName);
+
+            $category->image = 'category/' . $imageName;
+        }
+        
         $save = $category->save();
 
         if ($save) {

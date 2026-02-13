@@ -259,7 +259,7 @@ class ProductController extends Controller
         }
 
         $products = Product::whereIn('id', $idsArray)
-            ->where('id', '!=', $id) // ✅ current product exclude
+            ->where('id', '!=', $id)
             ->select(
                 'id',
                 'name',
