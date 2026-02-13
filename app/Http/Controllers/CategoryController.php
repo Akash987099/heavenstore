@@ -30,7 +30,7 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'required|image',
+            // 'image' => 'required|image',
         ]);
 
         $category = $this->category;
@@ -44,7 +44,7 @@ class CategoryController extends Controller
 
             $category->image = 'category/' . $imageName;
         }
-        
+
         $save = $category->save();
 
         if ($save) {
