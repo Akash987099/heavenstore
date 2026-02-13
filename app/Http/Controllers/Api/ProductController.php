@@ -222,9 +222,9 @@ class ProductController extends Controller
         $similar = $product->similar;
 
         if (empty($similar) && $similar == null) {
-            $similarProducts = $this->categorySubcategoryProducts($product->category, $product->sub_category);
+            $similarProducts = $this->categorySubcategoryProducts($product->category, $product->sub_category, $id);
         } else {
-            $similarProducts = $this->similarProducts($similar);
+            $similarProducts = $this->similarProducts($similar, $id);
         }
 
         $category = Category::find($product->category);
@@ -250,7 +250,7 @@ class ProductController extends Controller
         ], 200);
     }
 
-    private function similarProducts($ids)
+    private function similarProducts($ids, $id)
     {
         $idsArray = json_decode($ids, true);
 
@@ -258,7 +258,7 @@ class ProductController extends Controller
             return collect();
         }
 
-        $products = Product::whereIn('id', $idsArray)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
+        $products = Product::where('id', '!=', $id)->whereIn('id', $idsArray)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
         $products->each(function ($product) {
             $product->url = Str::slug($product->name) . '-' . $product->id;
             unset($product->id);
@@ -267,9 +267,9 @@ class ProductController extends Controller
         return $products;
     }
 
-    private function categorySubcategoryProducts($category, $subcategory)
+    private function categorySubcategoryProducts($category, $subcategory, $id)
     {
-        $products = Product::where('category', $category)->orWhere('sub_category', $subcategory)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
+        $products = Product::where('id', '!=', $id)->where('category', $category)->orWhere('sub_category', $subcategory)->select('id', 'name', 'sku_code as sku', 'brand_name', 'image', 'price', 'ac_price', 'hsn_code as hsn', 'description')->get();
 
         $products->each(function ($product) {
             $product->url = Str::slug($product->name) . '-' . $product->id;
