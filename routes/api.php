@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\PaylaterController;
 use App\Http\Controllers\Api\TableController;
 use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\RecentlyViewedController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
@@ -108,6 +109,13 @@ Route::middleware(['auth:api', \App\Http\Middleware\TrackApiUserActivity::class]
         Route::get('/', 'index');
         Route::post('/add', 'add');
         Route::get('/remove', 'remove');
+    });
+
+    Route::prefix('recently-viewed')->controller(RecentlyViewedController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/add', 'add');
+        Route::delete('/remove', 'remove');
+        Route::delete('/clear', 'clear');
     });
 
     Route::prefix('orders')->controller(OrderController::class)->group(function () {
