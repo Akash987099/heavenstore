@@ -292,7 +292,7 @@ class ProductController extends Controller
 
         $type = !empty($matches[0]) ? $matches[0][0] : null;
         $id   = !empty($matches[0]) ? end($matches[0]) : null;
-        dd($id);exit();
+        // dd($id);exit();
         try {
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands');
@@ -304,9 +304,10 @@ class ProductController extends Controller
             } else if ($type == 3) {
                 $products = $products->where('sub_category', $id);
             } else {
+                echo '1111';exit();
                 $products = $products->where('brands', $id);
             }
-
+            dd($products);exit();
             $products = $products->select(
                 'products.id',
                 'products.name',
