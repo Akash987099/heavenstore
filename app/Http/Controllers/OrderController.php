@@ -53,10 +53,21 @@ class OrderController extends Controller
     {
         $status = $this->status->all();
         $supplier = $this->supplier->where('type', 2)->get();
+        $latestTransactions = DB::table('transactions as t1')
+            ->select('t1.order_id', 't1.payment_id')
+            ->join(
+                DB::raw('(SELECT MAX(id) as id, order_id FROM transactions GROUP BY order_id) as t2'),
+                't1.id',
+                '=',
+                't2.id'
+            );
+
         $orders = $this->order
-            ->join('users', 'orders.user_id', 'users.id')
-            ->join('transactions', 'orders.id', 'transactions.order_id', 'left')
-            ->orderBy('id', 'desc')
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->leftJoinSub($latestTransactions, 'transactions', function ($join) {
+                $join->on('orders.id', '=', 'transactions.order_id');
+            })
+            ->orderBy('orders.id', 'desc')
             ->select('orders.*', 'users.name as user_name', 'transactions.payment_id')
             ->paginate(config('constants.pagination_limit'));
             // dd($orders);
