@@ -307,6 +307,7 @@ class ProductController extends Controller
                 echo '1111';exit();
                 $products = $products->where('brands', $id);
             }
+            
             dd($products);exit();
             $products = $products->select(
                 'products.id',
