@@ -169,7 +169,7 @@ class CategoryController extends Controller
         }
 
         $brands->each(function ($cat) {
-            $cat->url = Str::slug($cat->name) . '-' . $cat->id;
+            $cat->url = '5' . '-' . Str::slug($cat->name) . '-' . $cat->id;
             unset($cat->id);
         });
 
