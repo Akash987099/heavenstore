@@ -292,7 +292,7 @@ class ProductController extends Controller
 
         $type = !empty($matches[0]) ? $matches[0][0] : null;
         $id   = !empty($matches[0]) ? end($matches[0]) : null;
-        dd($type);exit();
+        // dd($type);exit();
         try {
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands');
