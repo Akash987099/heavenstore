@@ -52,7 +52,7 @@ class ProductController extends Controller
                             'discounts.name as discount',
                             'brands.name as brand'
                         )
-                        ->orderBy('position', 'Asc');
+                        ->orderBy('products.id', 'desc');
                 }])
                 ->select('id', 'name', 'position', 'image as banner')
                 ->whereNotNull('position')
