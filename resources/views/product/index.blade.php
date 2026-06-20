@@ -25,11 +25,43 @@
                 </div>
 
                 <div class="card-body px-0 pt-0 pb-2">
+                    <div class="px-4 pt-3">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-4">
+                                <label for="bulk_brand" class="form-label text-xs font-weight-bold">Bulk Brand</label>
+                                <select id="bulk_brand" class="form-control">
+                                    <option value="">Select Brand</option>
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary w-100 mb-0" id="applyBulkBrand">Update Brand</button>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bulk_summer" class="form-label text-xs font-weight-bold">Bulk Summer</label>
+                                <select id="bulk_summer" class="form-control">
+                                    <option value="">Select Summer</option>
+                                    @foreach ($summer as $summerItem)
+                                        <option value="{{ $summerItem->id }}">{{ $summerItem->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-info text-white w-100 mb-0" id="applyBulkSummer">Update Summer</button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-muted mt-2 mb-0">Checkbox se products select karke brand ya summer ek saath update kar sakte hain.</p>
+                    </div>
                     <div class="table-responsive p-0">
 
                         <table class="table align-items-center mb-0 datatable">
                             <thead>
                                 <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
+                                        <input type="checkbox" id="select-all-products">
+                                    </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Sr No.</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -71,6 +103,9 @@
                             <tbody id="sortable-table">
                                 @foreach ($products as $key => $item)
                                     <tr data-id="{{ $item->id }}">
+                                        <td class="ps-3">
+                                            <input type="checkbox" class="product-checkbox" value="{{ $item->id }}">
+                                        </td>
                                         <td>
                                             <i class="fas fa-bars text-secondary me-2 drag-handle" style="cursor:move"></i>
                                             {{ $products->firstItem() + $key }}
@@ -286,6 +321,70 @@
 
     <script>
         $(document).ready(function() {
+            function getSelectedProductIds() {
+                return $('.product-checkbox:checked').map(function() {
+                    return $(this).val();
+                }).get();
+            }
+
+            function bulkUpdateProducts(field, value) {
+                var ids = getSelectedProductIds();
+
+                if (!ids.length) {
+                    showNotification('warning', 'Please select at least one product.');
+                    return;
+                }
+
+                if (!value) {
+                    showNotification('warning', 'Please select a value first.');
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('product.bulk_update') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        ids: ids,
+                        field: field,
+                        value: value
+                    },
+                    success: function(res) {
+                        if (field === 'summer') {
+                            $('.product-checkbox:checked').each(function() {
+                                $(this).closest('tr').find('.select_summer').val(value);
+                            });
+                        }
+
+                        $('#select-all-products').prop('checked', false);
+                        $('.product-checkbox').prop('checked', false);
+                        showNotification('success', res.message || 'Successfully updated');
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        showNotification('danger', 'Something went wrong');
+                    }
+                });
+            }
+
+            $('#select-all-products').on('change', function() {
+                $('.product-checkbox').prop('checked', this.checked);
+            });
+
+            $('.product-checkbox').on('change', function() {
+                $('#select-all-products').prop(
+                    'checked',
+                    $('.product-checkbox').length === $('.product-checkbox:checked').length
+                );
+            });
+
+            $('#applyBulkBrand').on('click', function() {
+                bulkUpdateProducts('brand', $('#bulk_brand').val());
+            });
+
+            $('#applyBulkSummer').on('click', function() {
+                bulkUpdateProducts('summer', $('#bulk_summer').val());
+            });
 
             $('.select_summer').on('change', function() {
 
