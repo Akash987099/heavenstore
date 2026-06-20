@@ -52,7 +52,7 @@ class ProductController extends Controller
                             'discounts.name as discount',
                             'brands.name as brand'
                         )
-                        ->orderBy('products.id', 'desc');
+                        ->orderBy('position', 'Asc');
                 }])
                 ->select('id', 'name', 'position', 'image as banner')
                 ->whereNotNull('position')
@@ -292,7 +292,7 @@ class ProductController extends Controller
 
         $type = !empty($matches[0]) ? $matches[0][0] : null;
         $id   = !empty($matches[0]) ? end($matches[0]) : null;
-        // dd($type);exit();
+
         try {
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands');
@@ -306,6 +306,7 @@ class ProductController extends Controller
             } else {
                 $products = $products->where('brands', $id);
             }
+
             $products = $products->select(
                 'products.id',
                 'products.name',
