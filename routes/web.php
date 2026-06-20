@@ -136,6 +136,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('stock_save', 'stockSave')->name('stock_save');
         Route::post('select_stock', 'selectStock')->name('select_stock');
         Route::post('summer_status', 'summerStatus')->name('summer_status');
+        Route::post('bulk-update', 'bulkUpdate')->name('bulk_update');
         // Simalar
         Route::get('similar/{id}', 'similar')->name('similar');
         Route::post('similar/save', 'saveSimilar')->name('similar.save');

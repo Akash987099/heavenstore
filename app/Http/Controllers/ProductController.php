@@ -60,6 +60,7 @@ class ProductController extends Controller
     public function index()
     {
         $summer = $this->summer->all();
+        $brands = $this->brand->orderBy('name')->get();
         $clients = $this->client->where('status', 1)->orderBy('name')->get();
         $keyword = trim((string) request('q', ''));
 
@@ -78,7 +79,7 @@ class ProductController extends Controller
             ->paginate(config('constants.pagination_limit'))
             ->appends(['q' => $keyword]);
 
-        return view('product.index', compact('products', 'summer', 'clients'));
+        return view('product.index', compact('products', 'summer', 'brands', 'clients'));
     }
 
     public function search(Request $request)
@@ -534,6 +535,57 @@ class ProductController extends Controller
 
         return response()->json([
             'status'    => 'success',
+        ], 200);
+    }
+
+    public function bulkUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:products,id'],
+            'field' => ['required', 'in:brand,summer'],
+            'value' => ['required', 'integer'],
+        ]);
+
+        $products = $this->product->whereIn('id', $validated['ids']);
+
+        if ($validated['field'] === 'brand') {
+            $brand = $this->brand->find($validated['value']);
+
+            if (!$brand) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Brand not found'
+                ], 404);
+            }
+
+            $products->update([
+                'brands' => $brand->id,
+                'brand_name' => $brand->name,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Selected products brand updated successfully.'
+            ], 200);
+        }
+
+        $summer = $this->summer->find($validated['value']);
+
+        if (!$summer) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Summer not found'
+            ], 404);
+        }
+
+        $products->update([
+            'summer_id' => $summer->id,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Selected products summer updated successfully.'
         ], 200);
     }
 
