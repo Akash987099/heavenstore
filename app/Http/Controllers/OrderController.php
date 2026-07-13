@@ -19,6 +19,7 @@ use App\Models\OrderBarcode;
 use App\Models\User;
 use App\Models\Notification;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Courier;
 
 class OrderController extends Controller
 {
@@ -33,6 +34,7 @@ class OrderController extends Controller
     protected $barcode;
     protected $user;
     protected $notification;
+    protected $courier;
 
     public function __construct()
     {
@@ -47,6 +49,7 @@ class OrderController extends Controller
         $this->barcode = new OrderBarcode();
         $this->user = new User();
         $this->notification = new Notification();
+        $this->courier = new Courier();
     }
 
     public function index()
@@ -71,7 +74,8 @@ class OrderController extends Controller
             ->select('orders.*', 'users.name as user_name', 'transactions.payment_id')
             ->paginate(config('constants.pagination_limit'));
             // dd($orders);
-        return view('orders.index', compact('orders', 'status', 'supplier'));
+        $courier = $this->courier->where('status', 1)->get();
+        return view('orders.index', compact('orders', 'status', 'supplier', 'courier'));
     }
 
     public function export()
@@ -381,4 +385,5 @@ class OrderController extends Controller
 
         return $pdf->download('invoice-' . $order->order_no . '.pdf');
     }
+    
 }
