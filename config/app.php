@@ -55,9 +55,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://awcai.cloud/script/warehouse'),
+    'url' => env('APP_URL', 'https://panel.heavenkart.online/'),
 
-    'asset_url' => env('ASSET_URL', 'https://awcai.cloud/script/warehouse/public/'),
+    'asset_url' => env('ASSET_URL', 'https://panel.heavenkart.online/public/'),
 
     /*
     |--------------------------------------------------------------------------
