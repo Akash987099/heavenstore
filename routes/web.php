@@ -45,6 +45,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CourierController;
+use App\Http\Controllers\PlateformController;
 use App\Http\Controllers\Api\FaqController as ApiFaqController;
 
 // Cafe
@@ -132,6 +133,12 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('gallery/{id}', 'gallery')->name('gallery');
         Route::post('gallery_save', 'gallery_save')->name('gallery_save');
         Route::delete('gallery_delete/{id}', 'gallery_delete')->name('gallery_delete');
+
+        // plateform
+        Route::get('plateform/{id}', 'plateform')->name('plateform');
+        Route::post('plateform_save', 'plateform_save')->name('plateform_save');
+        Route::delete('plateform_delete/{id}', 'plateform_delete')->name('plateform_delete');
+
         // Stock
         Route::get('stock/{id}', 'stock')->name('stock');
         Route::post('stock_save', 'stockSave')->name('stock_save');
@@ -487,6 +494,17 @@ Route::middleware(['auth:admin'])->group(function () {
     });
 
     Route::prefix('courier')->controller(CourierController::class)->name('courier.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+        Route::post('status', 'updateStatus')->name('status');
+        Route::post('shipped', 'courier')->name('shipped');
+        Route::delete('delete/{id}', 'delete')->name('delete');
+    });
+
+    Route::prefix('plateform')->controller(PlateformController::class)->name('plateform.')->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');

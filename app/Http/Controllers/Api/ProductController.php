@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Varient;
 use App\Models\VarientValue;
 use App\Models\Combo;
-
+use App\Models\ProductPartner;
 
 class ProductController extends Controller
 {
@@ -410,6 +410,21 @@ class ProductController extends Controller
             : null;
 
         $gallery = Gallery::where('product_id', $id)->select('image')->get();
+        $ProductPartner = ProductPartner::with([
+            'partner:id,logo'
+        ])
+        ->where('product_id', $id)
+        ->get([
+            'id',
+            'platform_id',
+            'product_url'
+        ])
+        ->map(function ($item) {
+            return [
+                'logo' => asset($item->partner->logo),
+                'product_url' => $item->product_url,
+            ];
+        });
 
         return response()->json([
             'status' => true,
@@ -419,6 +434,8 @@ class ProductController extends Controller
             'gallery' => $gallery,
             'aplus'   => $aplus,
             'similar_products' => $similarProducts,
+            'product_partners' => $ProductPartner,
+            'reviews' => $this->review($id)
         ], 200);
     }
 

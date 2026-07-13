@@ -82,6 +82,8 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Gallery</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Plateform</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Similar</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">A
                                         Plus</th>
@@ -197,6 +199,13 @@
                                             <a href="{{ route('product.gallery', $item->id) }}"
                                                 class="text-xs font-weight-bold mb-0 text-info">
                                                 Gallery
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ route('product.plateform', $item->id) }}"
+                                                class="text-xs font-weight-bold mb-0 text-info">
+                                                Platform
                                             </a>
                                         </td>
 

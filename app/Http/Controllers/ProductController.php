@@ -18,6 +18,8 @@ use App\Models\Summer;
 use App\Models\Type;
 use App\Models\Varient;
 use App\Models\VarientValue;
+use App\Models\Plateform;
+use App\Models\ProductPartner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -37,6 +39,8 @@ class ProductController extends Controller
     protected $attributeValue;
     protected $varient;
     protected $varientValue;
+    protected $plateform;
+    protected $ProductPartner;
 
     public function __construct()
     {
@@ -54,6 +58,8 @@ class ProductController extends Controller
         $this->attributeValue = new AttributeValue();
         $this->varient = new Varient();
         $this->varientValue = new VarientValue();
+        $this->plateform = new Plateform();
+        $this->ProductPartner = new ProductPartner();
     }
 
 
@@ -440,6 +446,68 @@ class ProductController extends Controller
         $gallery = $this->gallery->where('id', $id)->delete();
 
         if (!$gallery) {
+            return response()->json(['status' => 'error', 'message' => "Failed!"]);
+        }
+
+        return response()->json(['status' => 'success', 'message' => "Success!"]);
+    }
+
+    //plateforms
+
+    public function plateform($id)
+    {
+        if (!$id) {
+            return redirect()->back()->with('error', 'id not found!');
+        }
+
+        $product = $this->product->find($id);
+        $plateform = $this->plateform->get();
+
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Record not found!');
+        }
+
+        $ProductPartner = $this->ProductPartner->where('product_id', $id)->get();
+        // dd($ProductPartner);
+
+        return view('product.plateform', compact('product', 'plateform', 'ProductPartner'));
+    }
+
+    public function plateform_save(Request $request)
+    {
+        $request->validate([
+            'plateform_id' => 'required',
+            'product_url' => 'required|url',
+            'id'=> 'required',
+        ]);
+
+        $productPartner = new ProductPartner();
+
+        $productPartner->product_id = $request->id;
+        $productPartner->platform_id = $request->plateform_id;
+        $productPartner->product_url = $request->product_url;
+        $productPartner->save();
+
+        return redirect()->back()->with('success', 'Plateform added successfully!');
+    }
+
+    public function plateform_delete($id)
+    {
+
+        if (!$id) {
+            return response()->json(['status' => 'error', 'message' => "id not found!"]);
+        }
+
+        $productPartner = $this->ProductPartner->where('id', $id)->first();
+
+        if (!$productPartner) {
+            return response()->json(['status' => 'error', 'message' => "Record not found!"]);
+        }
+
+        $productPartner = $this->ProductPartner->where('id', $id)->delete();
+
+        if (!$productPartner) {
             return response()->json(['status' => 'error', 'message' => "Failed!"]);
         }
 

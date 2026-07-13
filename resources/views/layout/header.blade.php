@@ -1651,6 +1651,8 @@
                                 href="{{ route('sub_category.index') }}"><i class="fas fa-list-ul"></i>Sub Category</a>
                             <a class="nav-link {{ request()->routeIs('brand.*') ? 'active' : '' }}"
                                 href="{{ route('brand.index') }}"><i class="fas fa-tags"></i>Brands</a>
+                            <a class="nav-link {{ request()->routeIs('plateform.*') ? 'active' : '' }}"
+                                href="{{ route('plateform.index') }}"><i class="fas fa-globe"></i>Platforms</a>
                             <a class="nav-link {{ request()->routeIs('table.*') ? 'active' : '' }}"
                                 href="{{ route('table.index') }}"><i class="fas fa-list"></i>Tables</a>
                             <a class="nav-link {{ request()->routeIs('points.*') ? 'active' : '' }}"
