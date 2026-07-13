@@ -26,6 +26,8 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Order Status</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Courier</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Delhivery Boy</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Amount</th>
@@ -81,22 +83,37 @@
                                         </td>
 
                                         <td>
-                                            @if($item->status !== 'Cancelled' && $item->status !== 'Delivered')
+                                            @if ($item->status !== 'Cancelled' && $item->status !== 'Delivered')
+                                                <select name="status"
+                                                    class="form-control text-xs font-weight-bold select_stock">
+                                                    <option value="">Select</option>
+                                                    @foreach ($status as $val)
+                                                        <option value="{{ $val->name }}" data-id="{{ $item->id }}"
+                                                            {{ $item->status == $val->name ? 'selected' : '' }}>
+                                                            {{ $val->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @elseif($item->status === 'Delivered')
+                                                <span class="text-success font-weight-bold text-xs">Delivered</span>
+                                            @else
+                                                <span class="text-danger font-weight-bold text-xs">Cancelled</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
                                             <select name="status"
-                                                class="form-control text-xs font-weight-bold select_stock">
+                                                class="form-control text-xs font-weight-bold courier_assign">
                                                 <option value="">Select</option>
-                                                @foreach ($status as $val)
-                                                    <option value="{{ $val->name }}" data-id="{{ $item->id }}"
-                                                        {{ $item->status == $val->name ? 'selected' : '' }}>
-                                                        {{ $val->name }}
+                                                @foreach ($courier as $val)
+                                                    <option value="{{ $val->id }}"
+                                                        data-code="{{ $val->courier_code }}"
+                                                        data-id="{{ $item->id }}"
+                                                        {{ $item->courier_id == $val->id ? 'selected' : '' }}>
+                                                        {{ $val->courier_name }} ({{ $val->courier_code }})
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @elseif($item->status === 'Delivered')
-                                            <span class="text-success font-weight-bold text-xs">Delivered</span>
-                                            @else
-                                            <span class="text-danger font-weight-bold text-xs">Cancelled</span>
-                                            @endif
                                         </td>
 
                                         <td>
@@ -175,7 +192,8 @@
                     },
                     success: function(res) {
                         console.log(res.message);
-                        showNotification('success', res.message || 'Status updated successfully');
+                        showNotification('success', res.message ||
+                            'Status updated successfully');
                     },
                     error: function(xhr) {
                         console.log(xhr.responseText);
@@ -204,11 +222,56 @@
                     },
                     success: function(res) {
                         console.log(res.message);
-                        showNotification('success', res.message || 'Status updated successfully');
+                        showNotification('success', res.message ||
+                            'Status updated successfully');
                     },
                     error: function(xhr) {
                         console.log(xhr.responseText);
                         showNotification('danger', 'Something went wrong');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.courier_assign').on('change', function() {
+
+                var product_id = $(this).find(':selected').data('id');
+                var courier_code = $(this).find(':selected').data('code');
+                var value = $(this).val();
+
+                $.ajax({
+                    url: "{{ route('courier.shipped') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        id: product_id,
+                        courier_code: courier_code,
+                        courier_id: value,
+                    },
+                    success: function(res) {
+
+                        if (res.status === false) {
+                            showNotification('danger', res.message || 'Something went wrong');
+                            return;
+                        }
+
+                        showNotification('success', res.message ||
+                            'Status updated successfully');
+                    },
+
+                    error: function(xhr) {
+
+                        let message = 'Something went wrong';
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            message = xhr.responseJSON.message;
+                        }
+
+                        showNotification('danger', message);
                     }
                 });
             });

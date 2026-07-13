@@ -44,6 +44,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\CourierController;
 use App\Http\Controllers\Api\FaqController as ApiFaqController;
 
 // Cafe
@@ -482,6 +483,17 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update', 'update')->name('update');
         Route::post('status', 'updateStatus')->name('status');
+        Route::delete('delete/{id}', 'delete')->name('delete');
+    });
+
+    Route::prefix('courier')->controller(CourierController::class)->name('courier.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+        Route::post('status', 'updateStatus')->name('status');
+        Route::post('shipped', 'courier')->name('shipped');
         Route::delete('delete/{id}', 'delete')->name('delete');
     });
 

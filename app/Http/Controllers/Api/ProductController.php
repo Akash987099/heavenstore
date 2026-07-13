@@ -629,6 +629,8 @@ class ProductController extends Controller
                 'image',
                 'price',
                 'ac_price',
+                'stock',
+                'in_stock',
                 'hsn_code as hsn',
                 'description'
             )
@@ -657,6 +659,8 @@ class ProductController extends Controller
                 'image',
                 'price',
                 'ac_price',
+                'stock',
+                'in_stock',
                 'hsn_code as hsn',
                 'description'
             )

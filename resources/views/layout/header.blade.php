@@ -1675,6 +1675,8 @@
                                 href="{{ route('attribute_value.index') }}"><i class="fas fa-store"></i>Attribute Value</a>
                             <a class="nav-link {{ request()->routeIs('offer.*') ? 'active' : '' }}"
                                 href="{{ route('offer.index') }}"><i class="fas fa-tags"></i>Offer</a>
+                            <a class="nav-link {{ request()->routeIs('courier.*') ? 'active' : '' }}"
+                                href="{{ route('courier.index') }}"><i class="fas fa-tags"></i>Courier</a>
                         </div>
                     </div>
                 </li>
