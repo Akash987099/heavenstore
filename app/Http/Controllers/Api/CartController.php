@@ -115,7 +115,7 @@ class CartController extends Controller
         $tax = calculateTax($totalPrice, $product->tax);
         $priceWithoutTax = $totalPrice;
         $taxAmount = $tax['tax_amount'];
-        $priceWithTax = $tax['total_amount'];
+        $priceWithTax = $tax['total_amount'] - $taxAmount;
 
         if (!$product) {
             return response()->json([
