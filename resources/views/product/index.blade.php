@@ -55,7 +55,7 @@
                               <div class="col-md-4">
                                 <label for="bulk_tax" class="form-label text-xs font-weight-bold">Bulk Tax</label>
                                 <select id="bulk_tax" class="form-control">
-                                    <option value="">Select Summer</option>
+                                    <option value="">Select Tax</option>
                                     @foreach ($tax as $item)
                                         <option value="{{ $item->tax_value }}">{{ $item->tax_value }}</option>
                                     @endforeach

@@ -619,7 +619,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'ids' => ['required', 'array', 'min:1'],
             'ids.*' => ['integer', 'exists:products,id'],
-            'field' => ['required', 'in:brand,summer'],
+            'field' => ['required', 'in:brand,summer,tax'],
             'value' => ['required', 'integer'],
         ]);
 
