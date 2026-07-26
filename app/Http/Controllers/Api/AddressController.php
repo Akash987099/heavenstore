@@ -29,18 +29,18 @@ class AddressController extends Controller
             'address'      => 'required|string',
 
             // FIXED
-            'person'       => 'required|string',
+            'receiverPerson'       => 'required|string',
 
             'landmark'     => 'nullable|string',
-            'contact'      => 'nullable|digits_between:10,12',
+            'receiverContact' => 'nullable|digits_between:10,12',
             'is_default'   => 'required|boolean',
 
             // FIXED lowercase
             'address_type' => 'required|in:Home,Work,Other',
 
             // FIXED numeric
-            'lat'          => 'nullable|numeric',
-            'lng'          => 'nullable|numeric',
+            'latitude'          => 'nullable|numeric',
+            'longitude'          => 'nullable|numeric',
         ]);
 
 
@@ -80,14 +80,14 @@ class AddressController extends Controller
             'block'      => $request->block,
             'village'    => $request->village,
             'address'    => $request->address,
-            'person'     => $request->person,
-            'contact'    => $request->contact,
+            'person'     => $request->receiverPerson,
+            'contact'    => $request->receiverContact,
             'landmark'    => $request->landmark,
             'is_default' => $request->is_default,
             'distance'   => $distance,
             'time'       => $time,
-            'lat'        => $request->lat,
-            'lng'        => $request->lng,
+            'lat'        => $request->latitude,
+            'lng'        => $request->longitude,
             'address_type' => $request->address_type,
             'street'      => $request->street,
         ]);
@@ -155,9 +155,9 @@ class AddressController extends Controller
             'block'       => 'nullable|string',
             'village'     => 'nullable|string',
             'address'     => 'required|string',
-            'person'      => 'nullable|string',
+            'receiverPerson'      => 'nullable|string',
             'landmark'      => 'nullable|string',
-            'contact'     => 'nullable|digits_between:10,12',
+            'receiverContact'     => 'nullable|digits_between:10,12',
             'is_default'  => 'required|boolean',
         ]);
 
