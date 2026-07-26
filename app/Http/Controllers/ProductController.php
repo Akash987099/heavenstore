@@ -657,6 +657,7 @@ class ProductController extends Controller
 
         $products->update([
             'summer_id' => $summer->id,
+            'tax' => $validated['value'],
         ]);
 
         return response()->json([
