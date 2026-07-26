@@ -39,6 +39,7 @@ class Product extends Model
         'product_type',
         'type',
         'type_value',
+        'tax',
     ];
 
     public function recommendedProducts()

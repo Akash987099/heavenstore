@@ -178,6 +178,18 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicle_name" class="form-label">Tax</label>
+                                    <select type="text" class="form-control" id="tax" name="tax">
+                                        <option value="">------Select Types------</option>
+                                        @foreach ($tax as $key => $item)
+                                            <option value="{{$item->tax_value}}" data-id="{{$item->id}}">{{$item->tax_value}}</option>
+                                        @endforeach
+                                    </select>    
+                                </div>
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="vehicle_number" class="form-label">Short Description</label>

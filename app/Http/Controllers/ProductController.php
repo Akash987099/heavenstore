@@ -19,6 +19,7 @@ use App\Models\Type;
 use App\Models\Varient;
 use App\Models\VarientValue;
 use App\Models\Plateform;
+use App\Models\Tax;
 use App\Models\ProductPartner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -41,6 +42,7 @@ class ProductController extends Controller
     protected $varientValue;
     protected $plateform;
     protected $ProductPartner;
+    protected $tax;
 
     public function __construct()
     {
@@ -60,12 +62,14 @@ class ProductController extends Controller
         $this->varientValue = new VarientValue();
         $this->plateform = new Plateform();
         $this->ProductPartner = new ProductPartner();
+        $this->tax     = new Tax();
     }
 
 
     public function index()
     {
         $summer = $this->summer->all();
+        $tax = $this->tax->all();
         $brands = $this->brand->orderBy('name')->get();
         $clients = $this->client->where('status', 1)->orderBy('name')->get();
         $keyword = trim((string) request('q', ''));
@@ -85,7 +89,7 @@ class ProductController extends Controller
             ->paginate(config('constants.pagination_limit'))
             ->appends(['q' => $keyword]);
 
-        return view('product.index', compact('products', 'summer', 'brands', 'clients'));
+        return view('product.index', compact('products', 'summer', 'brands', 'clients', 'tax'));
     }
 
     public function search(Request $request)
@@ -134,7 +138,8 @@ class ProductController extends Controller
         $brand = $this->brand->all();
         $discount = $this->discount->all();
         $type = $this->type->all();
-        return view('product.add', compact('category', 'sub_category', 'brand', 'discount', 'type'));
+        $tax = $this->tax->all();
+        return view('product.add', compact('category', 'sub_category', 'brand', 'discount', 'type', 'tax'));
     }
 
     public function import(Request $request)
@@ -266,6 +271,7 @@ class ProductController extends Controller
         $product->type = $request->type;
         $product->type_value = $request->type_value;
         $product->description = $request->description;
+        $product->tax = $request->tax;
         $product->short_description = $request->short_description;
         $product->image = 'product/' . $imageName;
         $product->barcode_base = $barcodeBase64;
@@ -295,7 +301,8 @@ class ProductController extends Controller
         $discount = $this->discount->all();
         $brand = $this->brand->all();
         $type = $this->type->all();
-        return view('product.edit', compact('product', 'category', 'sub_category', 'discount', 'brand', 'type'));
+        $tax = $this->tax->all();
+        return view('product.edit', compact('product', 'category', 'sub_category', 'discount', 'brand', 'type', 'tax'));
     }
 
     public function update(Request $request)
@@ -330,6 +337,7 @@ class ProductController extends Controller
         $product->type_value = $request->type_value;
         $product->slug = $request->slug;
         $product->description = $request->description;
+        $product->tax = $request->tax;
 
         if ($request->hasFile('image')) {
 

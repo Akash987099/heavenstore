@@ -77,6 +77,8 @@
                                         Stock</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Stock</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Tax</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Add
                                         Combo</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -172,6 +174,10 @@
                                                 class="text-xs font-weight-bold mb-0 text-info">
                                                 Stock
                                             </a>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $item->tax }}</p>
                                         </td>
 
                                         <td>
