@@ -34,6 +34,20 @@ if (!function_exists('email_temp')) {
     }
 }
 
+if (!function_exists('calculateTax')) {
+
+    function calculateTax($amount, $tax)
+    {
+        $tax = $tax ?? 0;
+
+        return [
+            'tax_percentage' => $tax,
+            'tax_amount'     => round(($amount * $tax) / 100, 2),
+            'total_amount'   => round($amount + (($amount * $tax) / 100), 2),
+        ];
+    }
+}
+
 if (!function_exists('send_email')) {
 
     function send_email(string $to, string $templateName, array $data = [])

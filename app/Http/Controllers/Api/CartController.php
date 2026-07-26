@@ -38,6 +38,7 @@ class CartController extends Controller
                 'carts.qty',
                 'carts.product_id',
                 'carts.discount',
+                'carts.tax_amount',
                 'products.price as product_price',
                 'products.ac_price',
                 'products.stock',
@@ -49,6 +50,7 @@ class CartController extends Controller
         $total = $carts->sum('qty');
         $price = $carts->sum('price');
         $discount = $carts->sum('discount');
+        $tax_amount = $carts->sum('tax_amount');
 
 
         $carts->each(function ($product) {
@@ -60,6 +62,7 @@ class CartController extends Controller
             'message' => 'Success!',
             'total_qty' => $total,
             'totalPrice' => $price,
+            'tax_amount' => $tax_amount,
             'distance' => $address ? $address->distance : 0,
             'time' => $address ? $address->time : 0,
             'delhivery_charge' => number_format($address ? ($address->distance * 5) : 0, 2),
@@ -109,6 +112,10 @@ class CartController extends Controller
         }
 
         $totalPrice = $product->price - $discountprice;
+        $tax = calculateTax($totalPrice, $product->tax);
+        $priceWithoutTax = $totalPrice;
+        $taxAmount = $tax['tax_amount'];
+        $priceWithTax = $tax['total_amount'];
 
         if (!$product) {
             return response()->json([
@@ -123,7 +130,9 @@ class CartController extends Controller
             if ($cart) {
                 $cart->qty += $request->qty;
                 $cart->discount  = $discountprice ?? 0;
-                $cart->price += ($totalPrice * $request->qty);
+                // $cart->price += ($totalPrice * $request->qty);
+                $cart->price = $priceWithoutTax * $cart->qty;
+                $cart->tax_amount   = $taxAmount * $cart->qty;
                 $cart->save();
             } else {
                 $cart = Cart::create([
@@ -131,7 +140,9 @@ class CartController extends Controller
                     'product_id' => $request->product_id,
                     'qty' => $request->qty,
                     'discount' => $discountprice ?? 0,
-                    'price' => $totalPrice * $request->qty,
+                    // 'price' => $totalPrice * $request->qty,
+                    'price' => $priceWithoutTax * $request->qty,
+                    'tax_amount'   => $taxAmount * $request->qty,
                 ]);
             }
 
@@ -167,7 +178,9 @@ class CartController extends Controller
                 ], 200);
             }
 
-            $cart->price = $cart->qty * $totalPrice;
+            // $cart->price = $cart->qty * $totalPrice;
+            $cart->price = $priceWithoutTax * $cart->qty;
+            $cart->tax_amount   = $taxAmount * $cart->qty;
             $cart->save();
 
             return response()->json([
@@ -200,6 +213,8 @@ class CartController extends Controller
                 $cart->qty = $request->qty;
                 $cart->discount = $discountprice ?? 0;
                 $cart->price = $totalPrice * $request->qty;
+                $cart->price = $priceWithoutTax * $request->qty;
+                $cart->tax_amount   = $taxAmount * $request->qty;
                 $cart->save();
             } else {
                 $cart = Cart::create([
@@ -207,7 +222,9 @@ class CartController extends Controller
                     'product_id' => $request->product_id,
                     'qty' => $request->qty,
                     'discount' => $discountprice ?? 0,
-                    'price' => $totalPrice * $request->qty,
+                    // 'price' => $totalPrice * $request->qty,
+                    'price' => $priceWithoutTax * $request->qty,
+                    'tax_amount'   => $taxAmount * $request->qty,
                 ]);
             }
 
