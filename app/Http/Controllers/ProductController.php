@@ -646,6 +646,19 @@ class ProductController extends Controller
             ], 200);
         }
 
+
+        if ($validated['field'] === 'tax') {
+
+            $products->update([
+                'tax' => $validated['value'],
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tax Apply successfully.'
+            ], 200);
+        }
+
         $summer = $this->summer->find($validated['value']);
 
         if (!$summer) {
@@ -656,7 +669,6 @@ class ProductController extends Controller
         }
 
         $products->update([
-            'summer_id' => $summer->id,
             'tax' => $validated['value'],
         ]);
 
