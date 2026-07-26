@@ -51,6 +51,19 @@
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-info text-white w-100 mb-0" id="applyBulkSummer">Update Summer</button>
                             </div>
+
+                              <div class="col-md-4">
+                                <label for="bulk_tax" class="form-label text-xs font-weight-bold">Bulk Tax</label>
+                                <select id="bulk_tax" class="form-control">
+                                    <option value="">Select Summer</option>
+                                    @foreach ($tax as $item)
+                                        <option value="{{ $item->tax_value }}">{{ $item->tax_value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-info text-white w-100 mb-0" id="applyBulkTax">Update Summer</button>
+                            </div>
                         </div>
                         <p class="text-xs text-muted mt-2 mb-0">Checkbox se products select karke brand ya summer ek saath update kar sakte hain.</p>
                     </div>
@@ -399,6 +412,10 @@
 
             $('#applyBulkSummer').on('click', function() {
                 bulkUpdateProducts('summer', $('#bulk_summer').val());
+            });
+
+            $('#applyBulkTax').on('click', function() {
+                bulkUpdateProducts('tax', $('#bulk_tax').val());
             });
 
             $('.select_summer').on('change', function() {
