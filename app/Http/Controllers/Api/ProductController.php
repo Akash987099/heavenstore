@@ -669,7 +669,7 @@ class ProductController extends Controller
 
     private function categorySubcategoryProducts($category, $subcategory, $id)
     {
-        $products = Product::where('id', '!=', $id)
+        $products = Product::where('id', '!=', $id)->where('stock', '!=', 0)->where('in_stock', 1)
             ->where(function ($query) use ($category, $subcategory) {
                 $query->where('category', $category)
                     ->orWhere('sub_category', $subcategory);
