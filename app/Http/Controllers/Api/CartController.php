@@ -113,9 +113,9 @@ class CartController extends Controller
 
         $totalPrice = $product->price - $discountprice;
         $tax = calculateTax($totalPrice, $product->tax);
-        $priceWithoutTax = $totalPrice;
         $taxAmount = $tax['tax_amount'];
-        $priceWithTax = $tax['total_amount'] - $taxAmount;
+        $priceWithoutTax = $totalPrice - $taxAmount;
+        $priceWithTax = $tax['total_amount'];
 
         if (!$product) {
             return response()->json([
@@ -131,7 +131,7 @@ class CartController extends Controller
                 $cart->qty += $request->qty;
                 $cart->discount  = $discountprice ?? 0;
                 // $cart->price += ($totalPrice * $request->qty);
-                $cart->price = $priceWithTax * $cart->qty;
+                $cart->price = $priceWithoutTax * $cart->qty;
                 $cart->tax_amount   = $taxAmount * $cart->qty;
                 $cart->save();
             } else {
@@ -141,7 +141,7 @@ class CartController extends Controller
                     'qty' => $request->qty,
                     'discount' => $discountprice ?? 0,
                     // 'price' => $totalPrice * $request->qty,
-                    'price' => $priceWithTax * $request->qty,
+                    'price' => $priceWithoutTax * $request->qty,
                     'tax_amount'   => $taxAmount * $request->qty,
                 ]);
             }
@@ -179,7 +179,7 @@ class CartController extends Controller
             }
 
             // $cart->price = $cart->qty * $totalPrice;
-            $cart->price = $priceWithTax * $cart->qty;
+            $cart->price = $priceWithoutTax * $cart->qty;
             $cart->tax_amount   = $taxAmount * $cart->qty;
             $cart->save();
 
@@ -213,7 +213,7 @@ class CartController extends Controller
                 $cart->qty = $request->qty;
                 $cart->discount = $discountprice ?? 0;
                 $cart->price = $totalPrice * $request->qty;
-                $cart->price = $priceWithTax * $request->qty;
+                $cart->price = $priceWithoutTax * $request->qty;
                 $cart->tax_amount   = $taxAmount * $request->qty;
                 $cart->save();
             } else {
@@ -223,7 +223,7 @@ class CartController extends Controller
                     'qty' => $request->qty,
                     'discount' => $discountprice ?? 0,
                     // 'price' => $totalPrice * $request->qty,
-                    'price' => $priceWithTax * $request->qty,
+                    'price' => $priceWithoutTax * $request->qty,
                     'tax_amount'   => $taxAmount * $request->qty,
                 ]);
             }
