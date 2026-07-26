@@ -378,7 +378,7 @@ class ProductController extends Controller
 
         $id = !empty($matches[0]) ? end($matches[0]) : null;
 
-        $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock', 'barcode_base as barcode', 'description', 'short_description')->first();
+        $product = Product::where('id', $id)->select('id', 'name', 'brand_name', 'image', 'price', 'ac_price', 'sku_code as sku', 'hsn_code as hsn', 'tags', 'meta_tag', 'category', 'sub_category', 'stock', 'in_stock', 'barcode_base as barcode', 'description', 'short_description', 'similar')->first();
 
         $aplus = $this->aplus($id);
         $variants = $this->variants($id);
@@ -392,10 +392,13 @@ class ProductController extends Controller
 
         $similar = $product->similar;
 
+        // dd($similar);
+
         if (empty($similar) && $similar == null) {
             $similarProducts = $this->categorySubcategoryProducts($product->category, $product->sub_category, $id);
         } else {
             $similarProducts = $this->similarProducts($similar, $id);
+            // dd($similarProducts);
         }
 
         $category = Category::find($product->category);
