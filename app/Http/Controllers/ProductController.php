@@ -646,19 +646,6 @@ class ProductController extends Controller
             ], 200);
         }
 
-
-        if ($validated['field'] === 'tax') {
-
-            $products->update([
-                'tax' => $validated['value'],
-            ]);
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Tax Apply successfully.'
-            ], 200);
-        }
-
         if ($validated['field'] === 'summer') {
 
         $summer = $this->summer->find($validated['value']);
@@ -671,7 +658,7 @@ class ProductController extends Controller
         }
 
         $products->update([
-            'tax' => $validated['value'],
+            'summer_id' => $validated['value'],
         ]);
 
         return response()->json([
@@ -679,6 +666,18 @@ class ProductController extends Controller
             'message' => 'Selected products summer updated successfully.'
         ], 200);
     }
+
+    if ($validated['field'] === 'tax') {
+
+            $products->update([
+                'tax' => $validated['value'],
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tax Apply successfully.'
+            ], 200);
+        }
 
     }
 
