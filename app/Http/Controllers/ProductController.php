@@ -659,6 +659,8 @@ class ProductController extends Controller
             ], 200);
         }
 
+        if ($validated['field'] === 'summer') {
+
         $summer = $this->summer->find($validated['value']);
 
         if (!$summer) {
@@ -676,6 +678,8 @@ class ProductController extends Controller
             'status' => 'success',
             'message' => 'Selected products summer updated successfully.'
         ], 200);
+    }
+
     }
 
     // Similar
