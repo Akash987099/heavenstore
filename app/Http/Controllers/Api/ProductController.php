@@ -21,6 +21,7 @@ use App\Models\Varient;
 use App\Models\VarientValue;
 use App\Models\Combo;
 use App\Models\ProductPartner;
+use App\Models\ChildCategory;
 
 
 class ProductController extends Controller
@@ -295,6 +296,8 @@ class ProductController extends Controller
         $type = !empty($matches[0]) ? $matches[0][0] : null;
         $id   = !empty($matches[0]) ? end($matches[0]) : null;
 
+        $childcategory = collect();
+
         try {
             $products = Product::leftJoin('discounts', 'discounts.id', '=', 'products.discount')
                 ->leftJoin('brands', 'brands.id', '=', 'products.brands');
@@ -305,6 +308,7 @@ class ProductController extends Controller
                 $products = $products->where('category', $id);
             } else if ($type == 3) {
                 $products = $products->where('sub_category', $id);
+                $childcategory = $this->childcategory($id);
             } else {
                 $products = $products->where('brands', $id);
             }
@@ -360,6 +364,7 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'categories' => $categories,
+                'childcategory' => $childcategory,
                 'data'   => $products
             ], 200);
         } catch (\Exception $e) {
@@ -369,6 +374,24 @@ class ProductController extends Controller
                 'error'  => $e->getMessage()
             ], 500);
         }
+    }
+
+    protected function childcategory($id)
+    {
+        $childcategory = ChildCategory::select(
+                'id',
+                'name',
+                'image',
+                'description'
+            )
+            ->where('sub_category_id', $id)
+            ->get();
+
+        $childcategory->each(function ($cat) {
+            $cat->url = '5-' . Str::slug($cat->name) . '-' . $cat->id;
+        });
+
+        return $childcategory;
     }
 
     // Product Details 
