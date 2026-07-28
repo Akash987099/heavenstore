@@ -248,6 +248,7 @@
                 $('#status').val('{{ $product->status }}');
                 $('#category').val('{{ $product->category }}');
                 $('#sub_category').val('{{ $product->sub_category }}');
+                $('#child_category').val('{{ $product->child_category }}');
                 $('#store').val('{{ $product->store }}');
                 $('#discount').val('{{ $product->discount }}');
                 $('#summer').val('{{ $product->summer_sale }}');
