@@ -21,6 +21,7 @@ use App\Models\VarientValue;
 use App\Models\Plateform;
 use App\Models\Tax;
 use App\Models\ProductPartner;
+use App\Models\ChildCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -28,6 +29,7 @@ class ProductController extends Controller
 {
     protected $category;
     protected $sub_category;
+    protected $child_category;
     protected $brand;
     protected $discount;
     protected $product;
@@ -48,6 +50,7 @@ class ProductController extends Controller
     {
         $this->category = new Category();
         $this->sub_category = new SubCategory();
+        $this->child_category = new ChildCategory();
         $this->brand = new Brand();
         $this->discount = new Discount();
         $this->product = new Product();
@@ -135,11 +138,12 @@ class ProductController extends Controller
     {
         $category = $this->category->all();
         $sub_category = $this->sub_category->all();
+        $child_category = $this->child_category->all();
         $brand = $this->brand->all();
         $discount = $this->discount->all();
         $type = $this->type->all();
         $tax = $this->tax->all();
-        return view('product.add', compact('category', 'sub_category', 'brand', 'discount', 'type', 'tax'));
+        return view('product.add', compact('category', 'sub_category', 'child_category', 'brand', 'discount', 'type', 'tax'));
     }
 
     public function import(Request $request)
@@ -266,6 +270,7 @@ class ProductController extends Controller
         $product->meta_tag = $request->meta_tag;
         $product->category = $request->category;
         $product->sub_category = $request->sub_category;
+        $product->child_category = $request->child_category;
         $product->discount = $request->discount;
         $product->brands = $request->brand;
         $product->type = $request->type;
@@ -298,11 +303,12 @@ class ProductController extends Controller
 
         $category = $this->category->all();
         $sub_category = $this->sub_category->all();
+        $child_category = $this->child_category->all();
         $discount = $this->discount->all();
         $brand = $this->brand->all();
         $type = $this->type->all();
         $tax = $this->tax->all();
-        return view('product.edit', compact('product', 'category', 'sub_category', 'discount', 'brand', 'type', 'tax'));
+        return view('product.edit', compact('product', 'category', 'sub_category', 'child_category', 'discount', 'brand', 'type', 'tax'));
     }
 
     public function update(Request $request)
@@ -330,6 +336,7 @@ class ProductController extends Controller
         $product->meta_tag = $request->meta_tag;
         $product->category = $request->category;
         $product->sub_category = $request->sub_category;
+        $product->child_category = $request->child_category;
         $product->discount = $request->discount;
         $product->short_description = $request->short_description;
         $product->brands = $request->brand;

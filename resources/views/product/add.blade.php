@@ -122,6 +122,18 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="vehicle_name" class="form-label">Child Category</label>
+                                    <select type="text" class="form-control" id="child_category" name="child_category" placeholder="Enter Details">
+                                        <option value="">------Select sub Category------</option>
+                                        @foreach ($child_category as $key => $item)
+                                            <option value="{{$item->id}}" data-id="{{$item->sub_category_id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>    
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="vehicle_name" class="form-label">Discount</label>
                                     <select type="text" class="form-control" id="discount" name="discount" placeholder="Enter Details">
                                         <option value="">------Select Discount------</option>

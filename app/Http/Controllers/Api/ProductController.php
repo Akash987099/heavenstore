@@ -309,6 +309,8 @@ class ProductController extends Controller
             } else if ($type == 3) {
                 $products = $products->where('sub_category', $id);
                 $childcategory = $this->childcategory($id);
+            }else if ($type == 4) {
+                $products = $products->where('child_category', $id);
             } else {
                 $products = $products->where('brands', $id);
             }
@@ -388,7 +390,7 @@ class ProductController extends Controller
             ->get();
 
         $childcategory->each(function ($cat) {
-            $cat->url = '5-' . Str::slug($cat->name) . '-' . $cat->id;
+            $cat->url = '4-' . Str::slug($cat->name) . '-' . $cat->id;
         });
 
         return $childcategory;

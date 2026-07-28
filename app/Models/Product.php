@@ -26,6 +26,7 @@ class Product extends Model
         'meta_tag',
         'category',
         'sub_category',
+        'child_category',
         'discount',
         'brands',
         'barcode_base',
