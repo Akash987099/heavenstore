@@ -6,14 +6,10 @@
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center category-card-header">
                     <div class="category-card-header-top">
-                        <h6 class="m-0">Sub Category</h6>
+                        <h6 class="m-0">Child Category</h6>
 
                         <div class="d-flex gap-2 flex-wrap">
-                            <a href="{{ route('sub_category.export') }}" class="btn btn-success btn-sm">
-                                Export
-                            </a>
-
-                            <a href="{{ route('sub_category.add') }}" class="btn btn-primary btn-sm category-card-add-btn">
+                            <a href="{{ route('child_category.add', $id) }}" class="btn btn-primary btn-sm category-card-add-btn">
                                 + Add
                             </a>
                         </div>
@@ -37,24 +33,22 @@
                                 </tr>
                             </thead>
                             <tbody id="sortable-table">
-                                @foreach ($category as $key => $item)
+                                @foreach ($childcategory as $key => $item)
                                     <tr data-id="{{ $item->id }}">
                                         <td>
                                             <i class="fas fa-bars text-secondary me-2 drag-handle" style="cursor:move"></i>
-                                            {{ $category->firstItem() + $key }}
+                                            {{ $childcategory->firstItem() + $key }}
                                         </td>
 
                                         <td>
-                                        <a href="{{ route('child_category.index', $item->id) }}"
-                                            <p class="text-xs font-weight-bold mb-0">{{ $item->category ? $item->category->name : 'N/A' }}</p>
-                                        </a>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $item->subCategory?->name ?? 'N/A' }}</p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p>
                                         </td>
 
                                         <td>
-                                            <a href="{{ route('sub_category.edit', $item->id) }}"
+                                            <a href="{{ route('child_category.edit', $item->id) }}"
                                                 class="text-secondary font-weight-bold text-xs">
                                                 Edit
                                             </a>
@@ -64,7 +58,7 @@
                             </tbody>
                         </table>
                         <div class="mt-4">
-                            {{ $category->links('shared.pagination') }}
+                            {{ $childcategory->links('shared.pagination') }}
                         </div>
                     </div>
                 </div>

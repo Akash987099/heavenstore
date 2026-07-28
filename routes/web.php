@@ -46,6 +46,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\PlateformController;
+use App\Http\Controllers\ChildCategoryController;
 use App\Http\Controllers\Api\FaqController as ApiFaqController;
 
 // Cafe
@@ -98,6 +99,14 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('export', 'export')->name('export');
         Route::get('add', 'add')->name('add');
         Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+    });
+
+    Route::prefix('child/category')->controller(ChildCategoryController::class)->name('child_category.')->group(function () {
+        Route::get('/{id}', 'index')->name('index');
+        Route::get('add/{id}', 'add')->name('add');
+        Route::post('save/{id}', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update', 'update')->name('update');
     });
