@@ -163,13 +163,13 @@ class UserController extends Controller
             $data['name'] = $request->name;
         }
 
-        if ($request->filled('phone')) {
-            $request->validate([
-                'phone' => 'string|max:20|unique:users,phone,' . $user->id,
-            ]);
+        // if ($request->filled('phone')) {
+        //     $request->validate([
+        //         'phone' => 'string|max:20|unique:users,phone,' . $user->id,
+        //     ]);
 
-            $data['phone'] = $request->phone;
-        }
+        //     $data['phone'] = $request->phone;
+        // }
 
         if ($request->hasFile('image')) {
 
