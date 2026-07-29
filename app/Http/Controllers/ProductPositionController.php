@@ -36,9 +36,16 @@ class ProductPositionController extends Controller
                 $join->on('products.id', '=', 'product_position.product_id')
                     ->where('product_position.position_id', '=', $id);
                     // ->where('product_position.type', '=', $type);
-            })
-            ->where('products.category', $id)
-            ->select(
+            });
+            if($type == 1){
+                $products->where('products.category', $id);
+            }elseif($type == 2){
+                $products->where('products.sub_category', $id);
+            }else{
+            $products->where('products.child_category', $id);
+            }
+
+            $products->select(
                 'products.*',
                 'product_position.order'
             )
