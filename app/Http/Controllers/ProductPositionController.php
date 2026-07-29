@@ -28,31 +28,32 @@ class ProductPositionController extends Controller
     public function index($id, $type)
     {
         if (!$id) {
-            return redirect()->back()->with('error', 'Category ID not found.');
+            return redirect()->back()->with('error', 'ID not found.');
         }
 
         $products = $this->product
             ->leftJoin('product_position', function ($join) use ($id, $type) {
                 $join->on('products.id', '=', 'product_position.product_id')
-                    ->where('product_position.position_id', '=', $id);
-                    // ->where('product_position.type', '=', $type);
+                    ->where('product_position.position_id', $id);
+                    // ->where('product_position.type', $type);
             });
-            if($type == 1){
-                $products->where('products.category', $id);
-            }elseif($type == 2){
-                $products->where('products.sub_category', $id);
-            }else{
-            $products->where('products.child_category', $id);
-            }
 
-            $products->select(
+        if ($type == 1) {
+            $products->where('products.category', $id);
+        } elseif ($type == 2) {
+            $products->where('products.sub_category', $id);
+        } elseif ($type == 3) {
+            $products->where('products.child_category', $id);
+        }
+
+        $products = $products->select(
                 'products.*',
                 'product_position.order'
             )
             ->orderByRaw('product_position.`order` IS NULL, product_position.`order` ASC')
             ->get();
 
-        return view('product_position/index', compact('products', 'id', 'type'));
+        return view('product_position.index', compact('products', 'id', 'type'));
     }
 
     public function updatePosition(Request $request)
