@@ -34,6 +34,8 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Name</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Products</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Status</th>
                                     <th class="text-secondary opacity-7">Action</th>
                                 </tr>
@@ -48,6 +50,15 @@
 
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p>
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ route('product_position.index', [
+                                                    'id' => $item->id,
+                                                    'type' => 1
+                                                ]) }}">
+                                                <p class="text-xs font-weight-bold mb-0">Products</p>
+                                            </a>
                                         </td>
 
                                         <td>

@@ -47,6 +47,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\PlateformController;
 use App\Http\Controllers\ChildCategoryController;
+use App\Http\Controllers\ProductPositionController;
 use App\Http\Controllers\Api\FaqController as ApiFaqController;
 
 // Cafe
@@ -109,6 +110,11 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('save/{id}', 'save')->name('save');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update', 'update')->name('update');
+    });
+
+    Route::prefix('product/postion')->controller(ProductPositionController::class)->name('product_position.')->group(function () {
+        Route::get('/{id}/{type}', 'index')->name('index');
+        Route::post('update-position', 'updatePosition')->name('updatePosition');
     });
 
     Route::prefix('brands')->controller(BrandController::class)->name('brand.')->group(function () {
