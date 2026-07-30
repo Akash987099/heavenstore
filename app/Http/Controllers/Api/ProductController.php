@@ -288,6 +288,10 @@ class ProductController extends Controller
         }
     }
 
+    public function childcategory($id){
+        $$childcategory = $this->childcategory($id);
+    }
+
     public function categoryProducts($name)
     {
 
@@ -308,7 +312,7 @@ class ProductController extends Controller
                 $products = $products->where('category', $id);
             } else if ($type == 3) {
                 $products = $products->where('sub_category', $id);
-                $childcategory = $this->childcategory($id);
+                // $childcategory = $this->childcategory($id);
             }else if ($type == 4) {
                 $products = $products->where('child_category', $id);
             } else {

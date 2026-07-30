@@ -48,6 +48,7 @@ Route::get('/faq', [FaqController::class, 'faq']);
 Route::get('/products', [ProductController::class, 'products']);
 Route::get('/summer-products/{id}', [ProductController::class, 'summerProducts']);
 Route::get('/category-products/{id}', [ProductController::class, 'categoryProducts']);
+Route::get('/child-category/{id}', [ProductController::class, 'childcategory']);
 Route::get('/all-products', [ProductController::class, 'allProducts']);
 Route::get('/products/{url}', [ProductController::class, 'productsDetails']);
 Route::get('/review/{id}', [ProductController::class, 'productsReview']);
