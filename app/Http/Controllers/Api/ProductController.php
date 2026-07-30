@@ -397,7 +397,12 @@ class ProductController extends Controller
             $cat->url = '4-' . Str::slug($cat->name) . '-' . $cat->id;
         });
 
-        return $childcategory;
+        // return $childcategory;
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'data'   => $childcategory
+        ], 200);
     }
 
     // Product Details 
