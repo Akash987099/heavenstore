@@ -382,16 +382,27 @@ class ProductController extends Controller
         }
     }
 
-    public function childcategory($id)
+    public function childcategory($name)
     {
+        preg_match_all('/\d+/', $name, $matches);
+
+        $type = !empty($matches[0]) ? $matches[0][0] : null;
+        $id   = !empty($matches[0]) ? end($matches[0]) : null;
+
         $childcategory = ChildCategory::select(
                 'id',
                 'name',
                 'image',
                 'description'
-            )
-            ->where('sub_category_id', $id)
-            ->get();
+            );
+
+            if ($type == 3) {
+                $childcategory = $childcategory->where('sub_category_id', $id);
+            }else {
+                $childcategory = $childcategory->where('id', $id);
+            }
+            // $childcategory->where('sub_category_id', $id)
+            $childcategory->get();
 
         $childcategory->each(function ($cat) {
             $cat->url = '4-' . Str::slug($cat->name) . '-' . $cat->id;
