@@ -382,8 +382,13 @@ class ProductController extends Controller
         }
     }
 
-    public function childcategory($id)
+    public function childcategory($name)
     {
+        preg_match_all('/\d+/', $name, $matches);
+
+        $type = !empty($matches[0]) ? $matches[0][0] : null;
+        $id   = !empty($matches[0]) ? end($matches[0]) : null;
+
         $childcategory = ChildCategory::select(
                 'id',
                 'name',
