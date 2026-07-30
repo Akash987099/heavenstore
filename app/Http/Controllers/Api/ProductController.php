@@ -288,9 +288,9 @@ class ProductController extends Controller
         }
     }
 
-    public function childcategory($id){
-        $$childcategory = $this->childcategory($id);
-    }
+    // public function childcategory($id){
+    //     $$childcategory = $this->childcategory($id);
+    // }
 
     public function categoryProducts($name)
     {
@@ -382,7 +382,7 @@ class ProductController extends Controller
         }
     }
 
-    protected function childcategory($id)
+    public function childcategory($id)
     {
         $childcategory = ChildCategory::select(
                 'id',
