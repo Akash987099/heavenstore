@@ -1308,7 +1308,14 @@ async function openBarcodeScanner()
         */
 
         barcodeReader =
-            new ZXingBrowser.BrowserMultiFormatReader();
+            new ZXingBrowser.BrowserMultiFormatReader(
+                new Map([
+                    [
+                        ZXingBrowser.BarcodeFormat.CODE_128,
+                        {}
+                    ]
+                ])
+            );
 
 
         scannerRunning = true;
@@ -1364,18 +1371,58 @@ async function openBarcodeScanner()
 
                     if (result) {
 
-                        const barcode =
-                            result.getText().trim();
-
+                        let barcode = result.getText();
 
                         if (!barcode) {
                             return;
                         }
 
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Clean Scanner Value
+                        |--------------------------------------------------------------------------
+                        */
+
+                        barcode = String(barcode)
+                            .trim()
+                            .replace(/\s+/g, '');
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Only Numeric SKU Product ID
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (!/^\d+$/.test(barcode)) {
+
+                            scannerStatus.textContent =
+                                'Invalid barcode. Please scan again...';
+
+                            return;
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Minimum / Maximum validation
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (barcode.length < 4 || barcode.length > 30) {
+
+                            scannerStatus.textContent =
+                                'Invalid SKU Product ID. Please scan again...';
+
+                            return;
+                        }
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Barcode Successfully Read
+                        |--------------------------------------------------------------------------
+                        */
 
                         scannerStatus.textContent =
                             'Barcode found: ' + barcode;
-
 
                         /*
                         |--------------------------------------------------------------------------
@@ -1385,15 +1432,13 @@ async function openBarcodeScanner()
 
                         stopBarcodeScanner();
 
-
                         /*
                         |--------------------------------------------------------------------------
-                        | Put Barcode In Search
+                        | Put Exact Barcode Into Search
                         |--------------------------------------------------------------------------
                         */
 
                         searchInput.value = barcode;
-
 
                         /*
                         |--------------------------------------------------------------------------
@@ -1402,7 +1447,6 @@ async function openBarcodeScanner()
                         */
 
                         searchProduct(barcode);
-
                     }
 
                 }
