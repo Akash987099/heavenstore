@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\Product;
+use App\Models\Product;
 use App\Models\PosOrder;
 use App\Models\PosOrderDetail;
 use Illuminate\Support\Facades\DB;
