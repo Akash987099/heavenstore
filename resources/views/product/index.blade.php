@@ -83,6 +83,9 @@
                                         Name</th>
 
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Barcode</th>
+
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Summer</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Status</th>
@@ -138,6 +141,10 @@
                                                 {{ $item->name }}
                                             </a>
                                             {{-- <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p> --}}
+                                        </td>
+
+                                         <td>
+                                          <img src="{{ $item->barcode_base }}" alt="Barcode" width="150">
                                         </td>
 
                                         <td>
