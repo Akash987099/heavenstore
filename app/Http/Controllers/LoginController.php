@@ -62,7 +62,7 @@ class LoginController extends Controller
     }
 
     public function loginPos(){
-        return view('pos\login');
+        return view('pos.login');
     }
 
     public function loginsPos(Request $request){
