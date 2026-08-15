@@ -57,7 +57,7 @@ return [
 
     'url' => env('APP_URL', 'https://panel.heavenkart.online/'),
 
-    'asset_url' => env('ASSET_URL', 'https://panel.heavenkart.online/public/'),
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------

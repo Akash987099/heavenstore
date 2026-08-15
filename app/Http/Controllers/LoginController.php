@@ -60,4 +60,18 @@ class LoginController extends Controller
         }
         return response()->json(['status' => 'error', 'message' => 'Invalid username or password.']);
     }
+
+    public function loginPos(){
+        return view('pos\login');
+    }
+
+    public function loginsPos(Request $request){
+        $credentials = $request->only('email', 'password');
+        // dd($credentials);
+        
+        if (Auth::guard('pos')->attempt($credentials)) {
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Invalid username or password.']);
+    }
 }

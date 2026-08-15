@@ -59,6 +59,11 @@ Route::controller(LoginController::class)->group(function () {
     Route::post('logins', 'logins')->name('logins');
 });
 
+Route::prefix('pos')->controller(LoginController::class)->name('pos.')->group(function () {
+    Route::get('login', 'loginPos')->name('login');
+    Route::post('logins', 'loginsPos')->name('logins');
+});
+
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
 });
