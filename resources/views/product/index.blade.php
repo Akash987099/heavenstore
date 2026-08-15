@@ -143,9 +143,15 @@
                                             {{-- <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p> --}}
                                         </td>
 
-                                         <td>
-                                          <img src="{{ $item->barcode_base }}" alt="Barcode" width="150">
-                                        </td>
+                                       <td>
+    <img
+        src="{{ $item->barcode_base }}"
+        alt="Barcode"
+        width="150"
+        class="barcode-preview cursor-pointer rounded-lg border border-slate-200 hover:shadow-md transition"
+        data-image="{{ $item->barcode_base }}"
+    >
+</td>
 
                                         <td>
                                             <select name="status"
@@ -353,6 +359,96 @@
             </div>
         </div>
     </div>
+
+    <!-- Barcode Image Modal -->
+<div
+    id="barcodeModal"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/70 p-4"
+>
+    <div
+        class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-2xl p-4 shadow-2xl"
+    >
+
+        <!-- Close -->
+        <button
+            type="button"
+            id="closeBarcodeModal"
+            class="absolute -top-3 -right-3 w-10 h-10
+                   rounded-full bg-white text-slate-700
+                   shadow-lg flex items-center justify-center
+                   hover:bg-slate-100"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+
+        <!-- Large Image -->
+        <div class="flex items-center justify-center max-h-[80vh] overflow-auto">
+            <img
+                id="barcodeModalImage"
+                src=""
+                alt="Barcode"
+                class="max-w-full max-h-[80vh] object-contain rounded-lg"
+            >
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modal = document.getElementById('barcodeModal');
+    const modalImage = document.getElementById('barcodeModalImage');
+    const closeButton = document.getElementById('closeBarcodeModal');
+
+    document.querySelectorAll('.barcode-preview').forEach(function (image) {
+
+        image.addEventListener('click', function () {
+
+            modalImage.src = this.dataset.image;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+        });
+
+    });
+
+
+    function closeModal() {
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+        modalImage.src = '';
+
+    }
+
+
+    closeButton.addEventListener('click', closeModal);
+
+
+    // Click outside image
+    modal.addEventListener('click', function (event) {
+
+        if (event.target === modal) {
+            closeModal();
+        }
+
+    });
+
+
+    // ESC key
+    document.addEventListener('keydown', function (event) {
+
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+
+    });
+
+});
+</script>
 
     <script>
         $(document).ready(function() {
