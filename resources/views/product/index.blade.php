@@ -143,13 +143,13 @@
                                             {{-- <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p> --}}
                                         </td>
 
-                                       <td>
+                                      <td>
     <img
         src="{{ $item->barcode_base }}"
         alt="Barcode"
         width="150"
-        class="barcode-preview cursor-pointer rounded-lg border border-slate-200 hover:shadow-md transition"
-        data-image="{{ $item->barcode_base }}"
+        class="barcode-preview cursor-pointer rounded border"
+        style="cursor: pointer;"
     >
 </td>
 
@@ -363,89 +363,111 @@
     <!-- Barcode Image Modal -->
 <div
     id="barcodeModal"
-    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/70 p-4"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        background:rgba(0,0,0,0.75);
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
 >
     <div
-        class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded-2xl p-4 shadow-2xl"
+        style="
+            position:relative;
+            background:#fff;
+            padding:20px;
+            border-radius:12px;
+            max-width:90vw;
+            max-height:90vh;
+        "
     >
 
-        <!-- Close -->
         <button
             type="button"
             id="closeBarcodeModal"
-            class="absolute -top-3 -right-3 w-10 h-10
-                   rounded-full bg-white text-slate-700
-                   shadow-lg flex items-center justify-center
-                   hover:bg-slate-100"
+            style="
+                position:absolute;
+                top:-15px;
+                right:-15px;
+                width:40px;
+                height:40px;
+                border:0;
+                border-radius:50%;
+                background:#fff;
+                color:#333;
+                font-size:20px;
+                cursor:pointer;
+                box-shadow:0 2px 10px rgba(0,0,0,.3);
+            "
         >
-            <i class="fas fa-times"></i>
+            &times;
         </button>
 
-        <!-- Large Image -->
-        <div class="flex items-center justify-center max-h-[80vh] overflow-auto">
-            <img
-                id="barcodeModalImage"
-                src=""
-                alt="Barcode"
-                class="max-w-full max-h-[80vh] object-contain rounded-lg"
-            >
-        </div>
+        <img
+            id="barcodeLargeImage"
+            src=""
+            alt="Barcode"
+            style="
+                display:block;
+                max-width:80vw;
+                max-height:80vh;
+                width:auto;
+                height:auto;
+                object-fit:contain;
+            "
+        >
 
     </div>
 </div>
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+$(document).on('click', '.barcode-preview', function () {
 
-    const modal = document.getElementById('barcodeModal');
-    const modalImage = document.getElementById('barcodeModalImage');
-    const closeButton = document.getElementById('closeBarcodeModal');
+    let imageSrc = $(this).attr('src');
 
-    document.querySelectorAll('.barcode-preview').forEach(function (image) {
+    console.log('Barcode clicked:', imageSrc);
 
-        image.addEventListener('click', function () {
-
-            modalImage.src = this.dataset.image;
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-
-        });
-
-    });
-
-
-    function closeModal() {
-
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-
-        modalImage.src = '';
-
+    if (!imageSrc) {
+        return;
     }
 
+    $('#barcodeLargeImage').attr('src', imageSrc);
 
-    closeButton.addEventListener('click', closeModal);
-
-
-    // Click outside image
-    modal.addEventListener('click', function (event) {
-
-        if (event.target === modal) {
-            closeModal();
-        }
-
-    });
+    $('#barcodeModal').css('display', 'flex');
+});
 
 
-    // ESC key
-    document.addEventListener('keydown', function (event) {
+$('#closeBarcodeModal').on('click', function () {
 
-        if (event.key === 'Escape') {
-            closeModal();
-        }
+    $('#barcodeModal').css('display', 'none');
 
-    });
+    $('#barcodeLargeImage').attr('src', '');
+
+});
+
+
+$('#barcodeModal').on('click', function (e) {
+
+    if (e.target === this) {
+
+        $(this).css('display', 'none');
+
+        $('#barcodeLargeImage').attr('src', '');
+    }
+
+});
+
+
+$(document).on('keydown', function (e) {
+
+    if (e.key === 'Escape') {
+
+        $('#barcodeModal').css('display', 'none');
+
+        $('#barcodeLargeImage').attr('src', '');
+    }
 
 });
 </script>
