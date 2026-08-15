@@ -360,8 +360,7 @@
         </div>
     </div>
 
-    <!-- Barcode Image Modal -->
-<div
+   <div
     id="barcodeModal"
     style="
         display:none;
@@ -378,13 +377,19 @@
         style="
             position:relative;
             background:#fff;
-            padding:20px;
-            border-radius:12px;
-            max-width:90vw;
-            max-height:90vh;
+            padding:35px 40px;
+            border-radius:15px;
+            width:650px;
+            max-width:95vw;
+            min-height:300px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow:0 10px 40px rgba(0,0,0,0.3);
         "
     >
 
+        <!-- Close -->
         <button
             type="button"
             id="closeBarcodeModal"
@@ -398,30 +403,32 @@
                 border-radius:50%;
                 background:#fff;
                 color:#333;
-                font-size:20px;
+                font-size:22px;
                 cursor:pointer;
                 box-shadow:0 2px 10px rgba(0,0,0,.3);
+                z-index:2;
             "
         >
             &times;
         </button>
 
+        <!-- Barcode -->
         <img
             id="barcodeLargeImage"
             src=""
             alt="Barcode"
             style="
-                display:block;
-                max-width:80vw;
-                max-height:80vh;
-                width:auto;
-                height:auto;
+                width:700px;
+                height:300px;
+                max-width:90vw;
                 object-fit:contain;
+                image-rendering:auto;
             "
         >
 
     </div>
 </div>
+
 <script>
 $(document).on('click', '.barcode-preview', function () {
 
