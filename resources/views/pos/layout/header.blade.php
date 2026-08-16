@@ -42,22 +42,18 @@
 </head>
 <body class="antialiased text-[#0F172A] bg-[#F8FAFC] flex h-screen overflow-hidden">
 
-
 <script>
 if ('serviceWorker' in navigator) {
 
     window.addEventListener('load', function () {
 
         navigator.serviceWorker.register(
-            "{{ asset('sw.js') }}",
-            {
-                scope: '/pos/'
-            }
+            "{{ asset('sw.js') }}"
         )
         .then(function (registration) {
 
             console.log(
-                'Heaven POS PWA registered:',
+                'PWA registered:',
                 registration.scope
             );
 
