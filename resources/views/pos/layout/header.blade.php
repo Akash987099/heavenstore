@@ -8,11 +8,13 @@
   <link rel="manifest" href="{{asset('manifest.json')}}">
   <meta name="theme-color" content="#128C7E">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-<link
-    rel="apple-touch-icon"
-    href="/images/pwa/icon-192.png"
->
+  <link
+        rel="apple-touch-icon"
+        href="{{ asset('images/pwa/icon-192.png') }}"
+    >
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,24 +42,36 @@
 </head>
 <body class="antialiased text-[#0F172A] bg-[#F8FAFC] flex h-screen overflow-hidden">
 
+
 <script>
-navigator.serviceWorker.register("{{ asset('sw.js') }}", {
-    scope: '/pos/'
-})
-.then(function (registration) {
+if ('serviceWorker' in navigator) {
 
-    console.log(
-        'PWA Service Worker registered:',
-        registration.scope
-    );
+    window.addEventListener('load', function () {
 
-})
-.catch(function (error) {
+        navigator.serviceWorker.register(
+            "{{ asset('sw.js') }}",
+            {
+                scope: '/pos/'
+            }
+        )
+        .then(function (registration) {
 
-    console.error(
-        'PWA registration failed:',
-        error
-    );
+            console.log(
+                'Heaven POS PWA registered:',
+                registration.scope
+            );
 
-});
+        })
+        .catch(function (error) {
+
+            console.error(
+                'PWA registration failed:',
+                error
+            );
+
+        });
+
+    });
+
+}
 </script>
