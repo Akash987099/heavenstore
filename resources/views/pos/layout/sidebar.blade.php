@@ -17,8 +17,8 @@
     <!-- Navigation -->
     <nav class="flex-1 space-y-1.5">
 
-        <a href="{{ route('index') }}"
-           class="sidebar-link {{ request()->routeIs('index') ? 'active' : '' }}
+        <a href="{{ route('pos.index') }}"
+           class="sidebar-link {{ request()->routeIs('pos.index') ? 'active' : '' }}
                   flex items-center gap-3 px-3 py-2.5 rounded-xl
                   text-sm font-medium text-slate-600">
 
@@ -117,8 +117,8 @@
     <nav class="flex-1 p-4 space-y-2">
 
         <a
-            href="{{ route('index') }}"
-            class="sidebar-link {{ request()->routeIs('index') ? 'active' : '' }}
+            href="{{ route('pos.index') }}"
+            class="sidebar-link {{ request()->routeIs('pos.index') ? 'active' : '' }}
                    flex items-center gap-3 px-4 py-3 rounded-xl
                    text-sm font-medium text-slate-600"
         >
