@@ -13,5 +13,7 @@ Route::middleware(['auth:pos'])->group(function () {
         Route::get('/order/create', 'save')->name('save');
         Route::get('/order/view/{id}', 'orderView')->name('order.view');
         Route::post('/order/payment/{id}', 'payment')->name('order.payment');
+
+        Route::get('/bills', 'bills')->name('bills');
     });
 });

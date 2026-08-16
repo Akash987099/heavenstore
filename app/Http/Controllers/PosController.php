@@ -438,4 +438,12 @@ public function save(Request $request)
             ->with('success', 'Payment completed successfully.');
     }
 
+    public function bills(){
+        $orders = PosOrder::with('details')
+                ->orderBy('id', 'desc')
+                ->paginate(20);
+
+            return view('pos.bills', compact('orders'));
+    }
+
 }
