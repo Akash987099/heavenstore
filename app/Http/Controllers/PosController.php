@@ -50,6 +50,7 @@ class PosController extends Controller
 
         // Total Orders
         $totalorder = $this->order
+        ->where('pos_user_id', Auth::guard('pos')->user()->id)
             ->count();
 
         return view(
