@@ -322,6 +322,22 @@ public function save(Request $request)
         );
     }
 
+    public function orderbill($id){
+        $order = PosOrder::with('details')
+            ->where('id', $id)
+            ->where(
+                'pos_user_id',
+                Auth::guard('pos')->id()
+            )
+            ->firstOrFail();
+
+
+        return view(
+            'pos.order-bill',
+            compact('order')
+        );
+    }
+
     public function payment(Request $request, $id)
     {
         /*
@@ -651,7 +667,7 @@ public function save(Request $request)
     return response()->json([
         'success' => true,
         'message' => 'Payment successful.',
-        'redirect' => route('pos.order'),
+        'redirect' => route('order.bill', $order->id),
         'order_id' => $order->id,
         'payment_status' => $order->payment_status,
     ]);

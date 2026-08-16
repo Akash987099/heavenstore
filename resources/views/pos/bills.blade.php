@@ -380,7 +380,22 @@
                                     </a>
                                 @else
                                 
-                                <p>-</p>
+                                <a
+                                        href="{{ route('pos.order.bill', $order->id) }}"
+                                        class="inline-flex
+                                               w-9 h-9
+                                               items-center
+                                               justify-center
+                                               rounded-lg
+                                               bg-slate-100
+                                               text-slate-600
+                                               hover:bg-[#128C7E]
+                                               hover:text-white
+                                               transition"
+                                        title="View Bill"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 @endif
 
                                 </td>
