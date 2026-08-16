@@ -361,7 +361,7 @@
 
                                 {{-- Action --}}
                                 <td class="px-5 py-4 text-center">
-                                @if($order === "pending")
+                                @if(empty($order->payment_method))
                                     <a
                                         href="{{ route('order.view', $order->id) }}"
                                         class="inline-flex
