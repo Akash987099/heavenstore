@@ -26,11 +26,13 @@ class PosController extends Controller
     {
         // Today's Orders
         $todayorder = $this->order
+            ->where('pos_user_id', Auth::guard('pos')->user()->id)
             ->whereDate('created_at', today())
             ->count();
 
         // This Week Orders
         $thisweek = $this->order
+        ->where('pos_user_id', Auth::guard('pos')->user()->id)
             ->whereBetween('created_at', [
                 now()->startOfWeek(),
                 now()->endOfWeek()
@@ -39,6 +41,7 @@ class PosController extends Controller
 
         // This Month Orders
         $thismonth = $this->order
+        ->where('pos_user_id', Auth::guard('pos')->user()->id)
             ->whereBetween('created_at', [
                 now()->startOfMonth(),
                 now()->endOfMonth()
@@ -493,6 +496,7 @@ public function save(Request $request)
 
     public function bills(){
         $orders = PosOrder::with('details')
+        ->where('pos_user_id', Auth::guard('pos')->user()->id)
                 ->orderBy('id', 'desc')
                 ->paginate(20);
 
