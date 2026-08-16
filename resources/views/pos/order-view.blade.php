@@ -770,8 +770,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 body: JSON.stringify({
 
-                    order_id:
-                        "{{ $order->id }}",
+                    order_id: "{{ $order->id }}",
+
+                    customer_name:
+                        document.getElementById('customer_name').value.trim(),
+
+                    customer_email:
+                        document.getElementById('customer_email').value.trim(),
+
+                    customer_phone:
+                        document.getElementById('customer_phone').value.trim(),
 
                     razorpay_payment_id:
                         response.razorpay_payment_id,
@@ -781,7 +789,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     razorpay_signature:
                         response.razorpay_signature
-
                 })
 
             }

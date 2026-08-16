@@ -525,6 +525,7 @@ public function save(Request $request)
 
     public function verifyRazorpayPayment(Request $request)
 {
+    // dd($request->all());
     $request->validate([
         'order_id' => 'required|integer',
         'razorpay_payment_id' => 'required|string',
@@ -600,6 +601,15 @@ public function save(Request $request)
     | Payment Verified
     |--------------------------------------------------------------------------
     */
+
+    $order->customer_name =
+    $request->customer_name;
+
+    $order->customer_email =
+        $request->customer_email;
+
+    $order->customer_phone =
+        $request->customer_phone;
 
     $order->payment_method = 'upi';
 
