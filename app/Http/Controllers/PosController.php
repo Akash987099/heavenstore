@@ -13,15 +13,51 @@ use Razorpay\Api\Api;
 class PosController extends Controller
 {
     protected $product;
+    protected $order;
+    protected $orderdetails;
 
     public function __construct(){
         $this->product = new Product();
+        $this->order   = new PosOrder();
+        $this->orderdetails = new PosOrderDetail();
     }
-    public function index(){
-        $totalRecords = '1111';
-        $todayRecords = '1111';
-        $totalGames = '1111';
-        return view('pos/index', compact('totalRecords', 'todayRecords', 'totalGames'));
+    
+    public function index()
+    {
+        // Today's Orders
+        $todayorder = $this->order
+            ->whereDate('created_at', today())
+            ->count();
+
+        // This Week Orders
+        $thisweek = $this->order
+            ->whereBetween('created_at', [
+                now()->startOfWeek(),
+                now()->endOfWeek()
+            ])
+            ->count();
+
+        // This Month Orders
+        $thismonth = $this->order
+            ->whereBetween('created_at', [
+                now()->startOfMonth(),
+                now()->endOfMonth()
+            ])
+            ->count();
+
+        // Total Orders
+        $totalorder = $this->order
+            ->count();
+
+        return view(
+            'pos.index',
+            compact(
+                'todayorder',
+                'thisweek',
+                'thismonth',
+                'totalorder'
+            )
+        );
     }
 
     public function order(){
