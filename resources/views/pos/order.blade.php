@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    function searchProduct(skuProductId) {
+    function searchProduct(skuProductId, autoAdd = false) {
 
         productLoader.classList.remove('hidden');
 
@@ -604,53 +604,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
             productLoader.classList.add('hidden');
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | No Products
-            |--------------------------------------------------------------------------
-            */
-
             if (
                 !data.success ||
                 !Array.isArray(data.products) ||
                 data.products.length === 0
             ) {
-
                 productTable.classList.add('hidden');
-
                 noResult.classList.remove('hidden');
-
                 return;
             }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Product Count
-            |--------------------------------------------------------------------------
-            */
 
             resultCount.textContent =
                 data.products.length + ' Products';
 
             resultCount.classList.remove('hidden');
 
+            /*
+            |--------------------------------------------------------------------------
+            | SCANNER PRODUCT -> DIRECT BILL
+            |--------------------------------------------------------------------------
+            */
+
+            if (autoAdd && data.products.length === 1) {
+
+                const product = data.products[0];
+
+                // Directly add to right-side bill
+                addProductToBill(product);
+
+                // Hide search result
+                productTable.classList.add('hidden');
+                resultCount.classList.add('hidden');
+
+                // Clear search
+                searchInput.value = '';
+
+                return;
+            }
 
             /*
             |--------------------------------------------------------------------------
-            | Show Table
+            | Normal Manual Search
             |--------------------------------------------------------------------------
             */
 
             productTable.classList.remove('hidden');
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Render Products
-            |--------------------------------------------------------------------------
-            */
 
             data.products.forEach(function (product) {
 
@@ -663,90 +661,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     'border-b border-slate-100 last:border-b-0 ' +
                     'hover:bg-emerald-50 transition bg-white';
 
-
-                /*
-                |--------------------------------------------------------------------------
-                | Product Data
-                |--------------------------------------------------------------------------
-                */
-
                 row.dataset.id = product.id;
-
                 row.dataset.name = product.name;
-
                 row.dataset.price = product.price;
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | Product Image
-                |--------------------------------------------------------------------------
-                */
 
                 const image = product.image
                     ? "{{ asset('') }}" + product.image
                     : "{{ asset('images/no-product.png') }}";
 
-
-                /*
-                |--------------------------------------------------------------------------
-                | Row HTML
-                |--------------------------------------------------------------------------
-                */
-
                 row.innerHTML = `
-
-                    <!-- Image -->
 
                     <div
                         class="w-14 h-14 rounded-lg bg-slate-100
-                               overflow-hidden shrink-0"
+                            overflow-hidden shrink-0"
                     >
-
                         <img
                             src="${image}"
                             alt="${escapeHtml(product.name)}"
                             class="w-full h-full object-cover"
                             onerror="this.onerror=null;this.src='{{ asset('images/no-product.png') }}';"
                         >
-
                     </div>
-
-
-                    <!-- Product Name -->
 
                     <div class="flex-1 min-w-0 px-4">
-
-                        <p
-                            class="text-sm font-semibold text-slate-800 truncate"
-                        >
+                        <p class="text-sm font-semibold text-slate-800 truncate">
                             ${escapeHtml(product.name)}
                         </p>
-
                     </div>
-
-
-                    <!-- Price -->
 
                     <div class="w-28 text-right">
-
-                        <p
-                            class="text-sm font-bold text-[#128C7E]"
-                        >
+                        <p class="text-sm font-bold text-[#128C7E]">
                             ₹${formatPrice(product.price)}
                         </p>
-
                     </div>
-
                 `;
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | IMPORTANT:
-                | Dynamic Product Row Click
-                |--------------------------------------------------------------------------
-                */
 
                 row.addEventListener('click', function (event) {
 
@@ -755,7 +703,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     addProductToBill(product);
 
                 });
-
 
                 productList.appendChild(row);
 
