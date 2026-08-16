@@ -61,7 +61,7 @@
     <!-- Logout -->
     <div class="mt-auto pt-4 border-t border-slate-200/60">
 
-        <a href="#"
+        <a href="{{ route('pos.logout') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-xl
                   text-sm font-medium text-slate-500 hover:text-rose-600">
 
@@ -164,7 +164,7 @@
     <div class="p-4 border-t border-slate-200">
 
         <a
-            href="#"
+            href="{{ route('pos.logout') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl
                    text-sm font-medium text-slate-500
                    hover:text-rose-600"

@@ -429,14 +429,14 @@
 
                                         <div
                                             class="h-20 rounded-xl border
-                                                   border-slate-200
-                                                   flex flex-col items-center
-                                                   justify-center gap-2
-                                                   text-slate-500
-                                                   peer-checked:border-[#128C7E]
-                                                   peer-checked:bg-emerald-50
-                                                   peer-checked:text-[#128C7E]
-                                                   transition"
+                                                border-slate-200
+                                                flex flex-col items-center
+                                                justify-center gap-2
+                                                text-slate-500
+                                                peer-checked:border-[#128C7E]
+                                                peer-checked:bg-emerald-50
+                                                peer-checked:text-[#128C7E]
+                                                transition"
                                         >
 
                                             <i class="fas fa-qrcode text-lg"></i>
@@ -556,6 +556,282 @@
 
 </div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const upiRadio = document.querySelector(
+        'input[name="payment_method"][value="upi"]'
+    );
+
+    const paymentAmount =
+        document.getElementById('paymentAmount');
+
+    if (!upiRadio) {
+        return;
+    }
+
+
+    upiRadio.addEventListener('change', function () {
+
+        if (!this.checked) {
+            return;
+        }
+
+        openRazorpay();
+
+    });
+
+
+    function openRazorpay() {
+
+        const amount = parseFloat(
+            paymentAmount.value
+        );
+
+        if (!amount || amount <= 0) {
+
+            alert('Invalid payment amount.');
+
+            return;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Disable UPI while creating Razorpay order
+        |--------------------------------------------------------------------------
+        */
+
+        upiRadio.disabled = true;
+
+
+        fetch(
+            "{{ route('pos.order.razorpay', $order->id) }}",
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+
+                    'X-CSRF-TOKEN':
+                        "{{ csrf_token() }}",
+
+                    'Accept': 'application/json'
+                }
+            }
+        )
+        .then(response => response.json())
+
+        .then(data => {
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message || 'Unable to create Razorpay order.'
+                );
+            }
+
+
+            const options = {
+
+                key: data.key,
+
+                amount: data.amount,
+
+                currency: data.currency,
+
+                name: 'Heaven Kart',
+
+                description:
+                    'POS Order {{ $order->order_number }}',
+
+                order_id:
+                    data.razorpay_order_id,
+
+
+                prefill: {
+
+                    name:
+                        document.getElementById('customer_name').value,
+
+                    email:
+                        document.getElementById('customer_email').value,
+
+                    contact:
+                        document.getElementById('customer_phone').value
+
+                },
+
+
+                theme: {
+                    color: '#128C7E'
+                },
+
+
+                handler: function (response) {
+
+                    verifyPayment(response);
+
+                },
+
+
+                modal: {
+
+                    ondismiss: function () {
+
+                        upiRadio.disabled = false;
+
+                        upiRadio.checked = false;
+
+                    }
+
+                }
+
+            };
+
+
+            const razorpay =
+                new Razorpay(options);
+
+
+            razorpay.on(
+                'payment.failed',
+                function (response) {
+
+                    console.error(
+                        'Razorpay Payment Failed:',
+                        response.error
+                    );
+
+                    alert(
+                        response.error.description ||
+                        'Payment failed.'
+                    );
+
+                    upiRadio.disabled = false;
+
+                    upiRadio.checked = false;
+
+                }
+            );
+
+
+            razorpay.open();
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            alert(
+                error.message ||
+                'Unable to open Razorpay.'
+            );
+
+            upiRadio.disabled = false;
+
+            upiRadio.checked = false;
+
+        });
+
+    }
+
+
+    function verifyPayment(response) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | Verify Payment on Laravel server
+        |--------------------------------------------------------------------------
+        */
+
+        fetch(
+            "{{ route('pos.order.razorpay.verify') }}",
+            {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type':
+                        'application/json',
+
+                    'X-CSRF-TOKEN':
+                        "{{ csrf_token() }}",
+
+                    'Accept':
+                        'application/json'
+
+                },
+
+                body: JSON.stringify({
+
+                    order_id:
+                        "{{ $order->id }}",
+
+                    razorpay_payment_id:
+                        response.razorpay_payment_id,
+
+                    razorpay_order_id:
+                        response.razorpay_order_id,
+
+                    razorpay_signature:
+                        response.razorpay_signature
+
+                })
+
+            }
+        )
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    'Payment verification failed.'
+                );
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Payment successful
+            |--------------------------------------------------------------------------
+            */
+
+            window.location.href =
+                data.redirect;
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            alert(
+                error.message ||
+                'Payment verification failed.'
+            );
+
+            upiRadio.disabled = false;
+
+            upiRadio.checked = false;
+
+        });
+
+    }
+
+});
+
+</script>
 
 <script>
 

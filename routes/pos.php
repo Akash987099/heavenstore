@@ -14,6 +14,9 @@ Route::middleware(['auth:pos'])->group(function () {
         Route::get('/order/view/{id}', 'orderView')->name('order.view');
         Route::post('/order/payment/{id}', 'payment')->name('order.payment');
 
+        Route::post('/order/razorpay/{id}', 'createRazorpayOrder')->name('order.razorpay');
+        Route::post('/payment/verify', 'verifyRazorpayPayment')->name('order.razorpay.verify');
+
         Route::get('/bills', 'bills')->name('bills');
     });
 });

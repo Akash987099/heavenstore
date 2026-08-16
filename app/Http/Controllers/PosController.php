@@ -8,6 +8,7 @@ use App\Models\PosOrder;
 use App\Models\PosOrderDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Razorpay\Api\Api;
 
 class PosController extends Controller
 {
@@ -445,5 +446,169 @@ public function save(Request $request)
 
             return view('pos.bills', compact('orders'));
     }
+
+    public function createRazorpayOrder($id)
+    {
+        $order = PosOrder::findOrFail($id);
+
+        $amount = (float) $order->grand_total;
+
+        if ($amount <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid payment amount.'
+            ], 422);
+        }
+
+        $api = new Api(
+            config('services.razorpay.key'),
+            config('services.razorpay.secret')
+        );
+
+        $razorpayOrder = $api->order->create([
+            'receipt' => $order->order_number,
+            'amount' => (int) round($amount * 100),
+            'currency' => 'INR',
+            'payment_capture' => 1,
+        ]);
+
+        $order->update([
+            'razorpay_order_id' => $razorpayOrder['id'],
+            'payment_method' => 'upi',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'key' => config('services.razorpay.key'),
+            'razorpay_order_id' => $razorpayOrder['id'],
+            'amount' => $razorpayOrder['amount'],
+            'currency' => $razorpayOrder['currency'],
+            'order_id' => $order->id,
+        ]);
+    }
+
+    public function verifyRazorpayPayment(Request $request)
+{
+    $request->validate([
+        'order_id' => 'required|integer',
+        'razorpay_payment_id' => 'required|string',
+        'razorpay_order_id' => 'required|string',
+        'razorpay_signature' => 'required|string',
+    ]);
+
+    $order = PosOrder::find($request->order_id);
+
+    if (!$order) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Order not found.',
+            'order_id' => $request->order_id,
+        ], 404);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Check Razorpay Order ID
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        empty($order->razorpay_order_id) ||
+        $order->razorpay_order_id !== $request->razorpay_order_id
+    ) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid Razorpay order.',
+        ], 400);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Razorpay API
+    |--------------------------------------------------------------------------
+    */
+
+    $api = new Api(
+        config('services.razorpay.key'),
+        config('services.razorpay.secret')
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Verify Signature
+    |--------------------------------------------------------------------------
+    */
+
+    try {
+
+        $api->utility->verifyPaymentSignature([
+            'razorpay_order_id'   => $order->razorpay_order_id,
+            'razorpay_payment_id' => $request->razorpay_payment_id,
+            'razorpay_signature'   => $request->razorpay_signature,
+        ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Payment verification failed.',
+            'error' => $e->getMessage(),
+        ], 400);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Verified
+    |--------------------------------------------------------------------------
+    */
+
+    $order->payment_method = 'upi';
+
+    $order->razorpay_payment_id =
+        $request->razorpay_payment_id;
+
+    $order->razorpay_signature =
+        $request->razorpay_signature;
+
+    $order->status = 'completed';
+
+    $order->payment_status = 'paid';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Save Order
+    |--------------------------------------------------------------------------
+    */
+
+    $saved = $order->save();
+
+
+    if (!$saved) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Payment verified but order update failed.',
+        ], 500);
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Return Success
+    |--------------------------------------------------------------------------
+    */
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Payment successful.',
+        'redirect' => route('pos.order'),
+        'order_id' => $order->id,
+        'payment_status' => $order->payment_status,
+    ]);
+}
 
 }
