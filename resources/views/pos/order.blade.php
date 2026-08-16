@@ -1393,7 +1393,7 @@ async function openBarcodeScanner()
                         |--------------------------------------------------------------------------
                         */
 
-                        searchProduct(barcode);
+                        searchProduct(barcode, true);
                     }
 
                 }
