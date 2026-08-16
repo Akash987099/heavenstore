@@ -412,7 +412,7 @@ public function save(Request $request)
         if (!$order) {
 
             return redirect()
-                ->route('pos.order')
+                ->route('pos.order.bill', $id)
                 ->with('error', 'Order not found.');
         }
 
@@ -487,7 +487,7 @@ public function save(Request $request)
         */
 
         return redirect()
-            ->route('pos.order', $order->id)
+            ->route('pos.order.bill', $order->id)
             ->with('success', 'Payment completed successfully.');
     }
 
@@ -667,7 +667,7 @@ public function save(Request $request)
     return response()->json([
         'success' => true,
         'message' => 'Payment successful.',
-        'redirect' => route('order.bill', $order->id),
+        'redirect' => route('pos.order.bill', $order->id),
         'order_id' => $order->id,
         'payment_status' => $order->payment_status,
     ]);
