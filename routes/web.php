@@ -48,6 +48,7 @@ use App\Http\Controllers\CourierController;
 use App\Http\Controllers\PlateformController;
 use App\Http\Controllers\ChildCategoryController;
 use App\Http\Controllers\ProductPositionController;
+use App\Http\Controllers\PosUserController;
 use App\Http\Controllers\Api\FaqController as ApiFaqController;
 
 // Cafe
@@ -88,6 +89,16 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('order/{id}', 'order')->name('order');
         Route::get('order/details/{id}', 'orderDetails')->name('order_details');
         Route::post('status', 'status')->name('status');
+    });
+
+    Route::prefix('posuser')->controller(PosUserController::class)->name('pos_user.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+        Route::get('orders', 'orders')->name('orders');
+        Route::get('order/{id}', 'orderView')->name('order_view');
     });
 
     Route::prefix('categories')->controller(CategoryController::class)->name('category.')->group(function () {

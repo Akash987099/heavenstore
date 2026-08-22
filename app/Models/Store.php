@@ -10,4 +10,10 @@ class Store extends Model
     use HasFactory;
     protected $table = 'store';
     protected $fillable = ['id', 'name', 'address', 'city' , 'zipcode', 'description', 'image', 'latitude', 'longitude', 'created_at', 'updated_at'];
+
+    public function pos()
+    {
+        return $this->hasMany(Pos::class, 'store_id', 'id');
+    }
+    
 }

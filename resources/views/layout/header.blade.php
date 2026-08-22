@@ -1716,6 +1716,28 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('status.*') || request()->routeIs('posuser.*') || request()->routeIs('village.*') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse" href="#sidebarPos" role="button"
+                        aria-expanded="{{ request()->routeIs('status.*') || request()->routeIs('country.*') || request()->routeIs('tehsil.*') || request()->routeIs('block.*') || request()->routeIs('village.*') ? 'true' : 'false' }}"
+                        aria-controls="sidebarPos">
+                        <div
+                            class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-sitemap text-dark"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Pos Management</span>
+                    </a>
+                    <div class="collapse {{ request()->routeIs('pos_user.*') || request()->routeIs('country.*') || request()->routeIs('state.*') || request()->routeIs('district.*') || request()->routeIs('tehsil.*') || request()->routeIs('block.*') || request()->routeIs('village.*') ? 'show' : '' }}"
+                        id="sidebarPos">
+                        <div class="side-submenu">
+                            <a class="nav-link {{ request()->routeIs('pos_user.*') ? 'active' : '' }}"
+                                href="{{ route('pos_user.index') }}"><i class="fas fa-user"></i>Pos</a>
+                            <a class="nav-link {{ request()->routeIs('pos_user.*') ? 'active' : '' }}"
+                                href="{{ route('pos_user.orders') }}"><i class="fas fa-user"></i>Pos Orders</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('leads.*') || request()->routeIs('leads.*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" href="#sidebarLeads" role="button"
                         aria-expanded="{{ request()->routeIs('leads.*') || request()->routeIs('leads.*') ? 'true' : 'false' }}"

@@ -10,5 +10,10 @@ class Pos extends Authenticatable
 {
     use HasFactory;
     protected $table = 'pos';
-    protected $fillable = ['id', 'name', 'email', 'password', 'store_id', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'name', 'email', 'mobile', 'password', 'store_id', 'created_at', 'updated_at'];
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
 }
