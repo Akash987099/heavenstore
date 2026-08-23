@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use App\Models\PosOrder;
 use App\Models\PosOrderDetail;
 use App\Models\Product;
+use Illuminate\Support\Facades\Hash;
 
 class PosUserController extends Controller
 {
@@ -29,6 +30,7 @@ class PosUserController extends Controller
     public function index(){
         $posuser = $this->pos
         ->with('store')
+        ->where('role', 1)
         ->orderBy('id', 'desc')
         ->paginate(config('constants.pagination_limit'));
         return view('posuser.index', compact('posuser'));
@@ -45,6 +47,7 @@ class PosUserController extends Controller
             'mobile' => 'required|digits:10|unique:pos,mobile',
             'email'  => 'required|email|max:255|unique:pos,email',
             'store'  => 'required',
+            'password' => 'required|string|min:6',
         ]);
 
         $pos = $this->pos;
@@ -52,6 +55,9 @@ class PosUserController extends Controller
         $pos->mobile = $request->mobile;
         $pos->email = $request->email;
         $pos->store_id = $request->store;
+        $pos->role = 1;
+        $pos->staff_id = generateStaffId();
+        $pos->password = Hash::make($request->password);
 
         $save = $pos->save();
 
@@ -109,6 +115,7 @@ class PosUserController extends Controller
         $pos->mobile = $request->mobile;
         $pos->email = $request->email;
         $pos->store_id = $request->store;
+        $pos->role = 1;
 
 
         if ($pos->save()) {

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\pos\ProductController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\PosLeaveController;
 
 Route::middleware(['auth:pos'])->group(function () {
     Route::controller(PosController::class)->name('pos.')->group(function () {
@@ -19,5 +20,19 @@ Route::middleware(['auth:pos'])->group(function () {
         Route::post('/payment/verify', 'verifyRazorpayPayment')->name('order.razorpay.verify');
 
         Route::get('/bills', 'bills')->name('bills');
+
+        // Staffs
+        Route::get('/staffs', 'staff')->name('staff');
+        Route::get('/staff/add', 'staffAdd')->name('staff.add');
+        Route::post('/staff/save', 'staffSave')->name('staff.save');
+        Route::get('/staff/{id}', 'staffView')->name('staff.view');
+    });
+
+    Route::prefix('leave')->controller(PosLeaveController::class)->name('leave.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::get('view/{id}', 'view')->name('view');
+        Route::post('/{id}/status', 'updateStatus')->name('status');
     });
 });

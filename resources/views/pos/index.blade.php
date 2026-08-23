@@ -9,10 +9,6 @@
         {{-- Dashboard Header --}}
         <div class="mb-6">
 
-            <h1 class="text-2xl md:text-3xl font-bold text-[#0F172A]">
-                POS Dashboard
-            </h1>
-
             <p class="text-slate-500 mt-1">
                 Manage your orders and sales from one place.
             </p>

@@ -10,7 +10,7 @@ class Pos extends Authenticatable
 {
     use HasFactory;
     protected $table = 'pos';
-    protected $fillable = ['id', 'name', 'email', 'mobile', 'password', 'store_id', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'name', 'email', 'mobile', 'role', 'user_id', 'password', 'store_id', 'created_at', 'updated_at'];
 
     public function store()
     {

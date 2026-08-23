@@ -28,6 +28,8 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Sr No.</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        ID</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Name</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Email</th>
@@ -42,6 +44,10 @@
                                         <td>
                                             <i class="fas fa-bars text-secondary me-2 drag-handle" style="cursor:move"></i>
                                             {{ $posuser->firstItem() + $key }}
+                                        </td>
+
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $item->staff_id }}</p>
                                         </td>
 
                                         <td>

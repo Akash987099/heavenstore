@@ -6,8 +6,21 @@ use App\Mail\OtpMail;
 use App\Models\Setting;
 use App\Models\Points;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use App\Models\Pos;
 
 use Carbon\Carbon;
+
+if (!function_exists('generateStaffId')) {
+    function generateStaffId()
+    {
+        do {
+          $staffId = rand(100000, 999999);
+        } while (Pos::where('staff_id', $staffId)->exists());
+
+        return $staffId;
+    }
+}
 
 if (!function_exists('date_formet')) {
 

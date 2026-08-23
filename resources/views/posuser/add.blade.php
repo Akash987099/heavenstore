@@ -40,6 +40,14 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        value="{{ old('password') }}" placeholder="Enter password" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="store" class="form-label">Store</label>
 
                                     <select class="form-control" id="store" name="store" required>

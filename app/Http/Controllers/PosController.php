@@ -5,53 +5,83 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\PosOrder;
+use App\Models\Pos;
 use App\Models\PosOrderDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Razorpay\Api\Api;
+use Illuminate\Support\Facades\Hash;
 
 class PosController extends Controller
 {
     protected $product;
     protected $order;
     protected $orderdetails;
+    protected $pos;
+    protected $user;
 
     public function __construct(){
         $this->product = new Product();
         $this->order   = new PosOrder();
         $this->orderdetails = new PosOrderDetail();
+        $this->pos = new Pos();
+        $this->user = Auth::guard('pos')->user();
     }
     
     public function index()
     {
+        $user = Auth::guard('pos')->user();
+
+        // Manager ke staff IDs
+        $staffIDs = $this->staffID($user->id);
+
+        // Manager + uske staff
+        if ($user->role == 1) {
+
+            $userIDs = array_merge(
+                [$user->id],
+                $staffIDs
+            );
+
+        } else {
+
+            // Staff sirf apne orders dekhe
+            $userIDs = [$user->id];
+        }
+
+
         // Today's Orders
         $todayorder = $this->order
-            ->where('pos_user_id', Auth::guard('pos')->user()->id)
+            ->whereIn('pos_user_id', $userIDs)
             ->whereDate('created_at', today())
             ->count();
 
+
         // This Week Orders
         $thisweek = $this->order
-        ->where('pos_user_id', Auth::guard('pos')->user()->id)
+            ->whereIn('pos_user_id', $userIDs)
             ->whereBetween('created_at', [
                 now()->startOfWeek(),
                 now()->endOfWeek()
             ])
             ->count();
 
+
         // This Month Orders
         $thismonth = $this->order
-        ->where('pos_user_id', Auth::guard('pos')->user()->id)
+            ->whereIn('pos_user_id', $userIDs)
             ->whereBetween('created_at', [
                 now()->startOfMonth(),
                 now()->endOfMonth()
             ])
             ->count();
 
+
         // Total Orders
         $totalorder = $this->order
-        ->where('pos_user_id', Auth::guard('pos')->user()->id)
+            ->whereIn('pos_user_id', $userIDs)
             ->count();
+
 
         return view(
             'pos.index',
@@ -117,7 +147,7 @@ class PosController extends Controller
         ]);
     }
 
-public function save(Request $request)
+    public function save(Request $request)
     {
         /*
         |--------------------------------------------------------------------------
@@ -326,20 +356,22 @@ public function save(Request $request)
         );
     }
 
-    public function orderbill($id){
-        $order = PosOrder::with('details')
-            ->where('id', $id)
-            ->where(
-                'pos_user_id',
-                Auth::guard('pos')->id()
-            )
-            ->firstOrFail();
+    public function orderbill($id)
+    {
+        $user = Auth::guard('pos')->user();
 
+        $query = PosOrder::with('details')
+            ->where('id', $id);
 
-        return view(
-            'pos.order-bill',
-            compact('order')
-        );
+        // Staff apna hi order dekh sakta hai
+        if ($user->role == 2) {
+            $query->where('pos_user_id', $user->id);
+        }
+
+        // IMPORTANT: result ko $order mein assign karo
+        $order = $query->firstOrFail();
+
+        return view('pos.order-bill', compact('order'));
     }
 
     public function payment(Request $request, $id)
@@ -495,13 +527,41 @@ public function save(Request $request)
             ->with('success', 'Payment completed successfully.');
     }
 
-    public function bills(){
-        $orders = PosOrder::with('details')
-        ->where('pos_user_id', Auth::guard('pos')->user()->id)
-                ->orderBy('id', 'desc')
-                ->paginate(20);
+    private function staffID($managerID)
+    {
+        return $this->pos
+            ->where('user_id', $managerID)
+            ->pluck('id')
+            ->toArray();
+    }
 
-            return view('pos.bills', compact('orders'));
+    public function bills()
+    {
+        $user = Auth::guard('pos')->user();
+
+        $orders = PosOrder::with('details');
+
+        if ($user->role == 1) {
+
+            $staffIDs = $this->staffID($user->id);
+
+            $userIDs = array_merge(
+                [$user->id],
+                $staffIDs
+            );
+
+            $orders->whereIn('pos_user_id', $userIDs);
+
+        } else {
+
+            $orders->where('pos_user_id', $user->id);
+        }
+
+        $orders = $orders
+            ->orderBy('id', 'desc')
+            ->paginate(20);
+
+        return view('pos.bills', compact('orders'));
     }
 
     public function createRazorpayOrder($id)
@@ -545,137 +605,185 @@ public function save(Request $request)
     }
 
     public function verifyRazorpayPayment(Request $request)
-{
-    // dd($request->all());
-    $request->validate([
-        'order_id' => 'required|integer',
-        'razorpay_payment_id' => 'required|string',
-        'razorpay_order_id' => 'required|string',
-        'razorpay_signature' => 'required|string',
-    ]);
-
-    $order = PosOrder::find($request->order_id);
-
-    if (!$order) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Order not found.',
-            'order_id' => $request->order_id,
-        ], 404);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Check Razorpay Order ID
-    |--------------------------------------------------------------------------
-    */
-
-    if (
-        empty($order->razorpay_order_id) ||
-        $order->razorpay_order_id !== $request->razorpay_order_id
-    ) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid Razorpay order.',
-        ], 400);
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Razorpay API
-    |--------------------------------------------------------------------------
-    */
-
-    $api = new Api(
-        config('services.razorpay.key'),
-        config('services.razorpay.secret')
-    );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Verify Signature
-    |--------------------------------------------------------------------------
-    */
-
-    try {
-
-        $api->utility->verifyPaymentSignature([
-            'razorpay_order_id'   => $order->razorpay_order_id,
-            'razorpay_payment_id' => $request->razorpay_payment_id,
-            'razorpay_signature'   => $request->razorpay_signature,
+    {
+        // dd($request->all());
+        $request->validate([
+            'order_id' => 'required|integer',
+            'razorpay_payment_id' => 'required|string',
+            'razorpay_order_id' => 'required|string',
+            'razorpay_signature' => 'required|string',
         ]);
 
-    } catch (\Exception $e) {
+        $order = PosOrder::find($request->order_id);
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found.',
+                'order_id' => $request->order_id,
+            ], 404);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check Razorpay Order ID
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            empty($order->razorpay_order_id) ||
+            $order->razorpay_order_id !== $request->razorpay_order_id
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Razorpay order.',
+            ], 400);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Razorpay API
+        |--------------------------------------------------------------------------
+        */
+
+        $api = new Api(
+            config('services.razorpay.key'),
+            config('services.razorpay.secret')
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Verify Signature
+        |--------------------------------------------------------------------------
+        */
+
+        try {
+
+            $api->utility->verifyPaymentSignature([
+                'razorpay_order_id'   => $order->razorpay_order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_signature'   => $request->razorpay_signature,
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment verification failed.',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Payment Verified
+        |--------------------------------------------------------------------------
+        */
+
+        $order->customer_name =
+        $request->customer_name;
+
+        $order->customer_email =
+            $request->customer_email;
+
+        $order->customer_phone =
+            $request->customer_phone;
+
+        $order->payment_method = 'upi';
+
+        $order->razorpay_payment_id =
+            $request->razorpay_payment_id;
+
+        $order->razorpay_signature =
+            $request->razorpay_signature;
+
+        $order->status = 'completed';
+
+        $order->payment_status = 'paid';
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Save Order
+        |--------------------------------------------------------------------------
+        */
+
+        $saved = $order->save();
+
+
+        if (!$saved) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment verified but order update failed.',
+            ], 500);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return Success
+        |--------------------------------------------------------------------------
+        */
 
         return response()->json([
-            'success' => false,
-            'message' => 'Payment verification failed.',
-            'error' => $e->getMessage(),
-        ], 400);
+            'success' => true,
+            'message' => 'Payment successful.',
+            'redirect' => route('pos.order.bill', $order->id),
+            'order_id' => $order->id,
+            'payment_status' => $order->payment_status,
+        ]);
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Payment Verified
-    |--------------------------------------------------------------------------
-    */
+    // Sttafs
 
-    $order->customer_name =
-    $request->customer_name;
-
-    $order->customer_email =
-        $request->customer_email;
-
-    $order->customer_phone =
-        $request->customer_phone;
-
-    $order->payment_method = 'upi';
-
-    $order->razorpay_payment_id =
-        $request->razorpay_payment_id;
-
-    $order->razorpay_signature =
-        $request->razorpay_signature;
-
-    $order->status = 'completed';
-
-    $order->payment_status = 'paid';
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Save Order
-    |--------------------------------------------------------------------------
-    */
-
-    $saved = $order->save();
-
-
-    if (!$saved) {
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Payment verified but order update failed.',
-        ], 500);
+    public function staff(){
+        $users = $this->pos->where('user_id', Auth::guard('pos')->user()->id)->paginate(20);
+        return view('pos.staffs', compact('users'));
+        
     }
 
+    public function staffAdd(){
+        return view('pos.staffs.add');
+    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Return Success
-    |--------------------------------------------------------------------------
-    */
+    public function staffSave(Request $request){
+        // dd($request->all());
+        $request->validate([
+            'name'   => 'required|string|max:255',
+            'mobile' => 'required|digits:10|unique:pos,mobile',
+            'email'  => 'required|email|max:255|unique:pos,email',
+            'password' => 'required|string|min:6',
+        ]);
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Payment successful.',
-        'redirect' => route('pos.order.bill', $order->id),
-        'order_id' => $order->id,
-        'payment_status' => $order->payment_status,
-    ]);
-}
+        $pos = $this->pos;
+        $pos->name = $request->name;
+        $pos->mobile = $request->mobile;
+        $pos->email = $request->email;
+        $pos->store_id = Auth::guard('pos')->user()->store_id;
+        $pos->user_id = Auth::guard('pos')->user()->id;
+        $pos->role = 2;
+        $pos->staff_id = generateStaffId();
+        $pos->password = Hash::make($request->password);
+
+        $save = $pos->save();
+
+        if ($save) {
+            return redirect()->back()->with('success', 'Successfully!');
+        }
+        return redirect()->back()->with('error', 'Failed!');
+    }
+
+    public function staffView($id)
+    {
+        $staff = Pos::with('store')
+            ->findOrFail($id);
+
+        return view('pos.staffs.view', compact('staff'));
+    }
 
 }
