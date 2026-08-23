@@ -121,7 +121,7 @@
                                     transition"
                             title="View policy"
                         >
-                            $order->pdf
+                            {{$order->pdf}}
                         </a>
 
                     </td>
