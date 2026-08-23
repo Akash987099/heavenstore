@@ -1120,4 +1120,22 @@ class ProductController extends Controller
             'status'    => 'success',
         ], 200);
     }
+
+    public function barcode(){
+        $barcodes = $this->product->select('id', 'sku_product_id', 'barcode_base')->orderBy('id', 'desc')->paginate(config('constants.pagination_limit'));
+        return view('product.barcodes', compact('barcodes'));
+    }
+
+    public function barcode_print(Request $request)
+    {
+        $ids = $request->ids;
+
+        if (!$ids) {
+            return redirect()->back()->with('error', 'Please select orders');
+        }
+
+        $products = $this->product->whereIn('id', $ids)->get();
+
+        return view('product.print_barcode', compact('products'));
+    }
 }

@@ -1667,6 +1667,8 @@
                                 href="{{ route('discount.index') }}"><i class="fas fa-percent"></i>Discount</a>
                             <a class="nav-link {{ request()->routeIs('product.*') ? 'active' : '' }}"
                                 href="{{ route('product.index') }}"><i class="fas fa-box-open"></i>Product</a>
+                            <a class="nav-link {{ request()->routeIs('product.*') ? 'active' : '' }}"
+                                href="{{ route('product.barcode') }}"><i class="fas fa-box-open"></i>Product Barcode</a>
                             <a class="nav-link {{ request()->routeIs('combo.*') ? 'active' : '' }}"
                                 href="{{ route('combo.index') }}"><i class="fas fa-box-open"></i>Combo Product</a>
                             <a class="nav-link {{ request()->routeIs('store.*') ? 'active' : '' }}"

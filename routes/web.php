@@ -169,6 +169,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('status', 'status')->name('status');
         Route::post('update', 'update')->name('update');
+        Route::get('barcode', 'barcode')->name('barcode');
+        Route::post('barcode_print', 'barcode_print')->name('barcode_print');
         // Gallery
         Route::get('gallery/{id}', 'gallery')->name('gallery');
         Route::post('gallery_save', 'gallery_save')->name('gallery_save');
