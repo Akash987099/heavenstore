@@ -88,6 +88,8 @@
 
                      @forelse($policy as $key => $order)
 
+                     <tr>
+
                     <td class="px-5 py-4 text-slate-500">
 
                         {{ $policy->firstItem() + $key }}
@@ -116,6 +118,7 @@
                         </a>
 
                     </td>
+                    <tr>
 
                      @empty
 
