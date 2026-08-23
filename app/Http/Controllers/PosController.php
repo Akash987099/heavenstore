@@ -790,7 +790,7 @@ class PosController extends Controller
     }
 
     public function policy(){
-        $policy = $this->policy->get();
+        $policy = $this->policy->paginate(20);
         return view('pos.policy', compact('policy'));
     }
 
