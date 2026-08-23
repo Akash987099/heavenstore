@@ -26,6 +26,9 @@ Route::middleware(['auth:pos'])->group(function () {
         Route::get('/staff/add', 'staffAdd')->name('staff.add');
         Route::post('/staff/save', 'staffSave')->name('staff.save');
         Route::get('/staff/{id}', 'staffView')->name('staff.view');
+
+        // Poliy
+         Route::get('/policy', 'policy')->name('policy');
     });
 
     Route::prefix('leave')->controller(PosLeaveController::class)->name('leave.')->group(function () {

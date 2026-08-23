@@ -1869,6 +1869,8 @@
                                 href="{{ route('promotional.index') }}"><i class="fas fa-bullhorn"></i>Promotional</a>
                             <a class="nav-link {{ request()->routeIs('email_template.*') ? 'active' : '' }}"
                                 href="{{ route('email_template.index') }}"><i class="fas fa-envelope"></i>Email Template</a>
+                            <a class="nav-link {{ request()->routeIs('policy.*') ? 'active' : '' }}"
+                                href="{{ route('policy.index') }}"><i class="fas fa-file-contract"></i>Policy</a>
                         </div>
                     </div>
                 </li>

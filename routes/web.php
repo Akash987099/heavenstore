@@ -49,6 +49,7 @@ use App\Http\Controllers\PlateformController;
 use App\Http\Controllers\ChildCategoryController;
 use App\Http\Controllers\ProductPositionController;
 use App\Http\Controllers\PosUserController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\Api\FaqController as ApiFaqController;
 
 // Cafe
@@ -99,6 +100,13 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('update', 'update')->name('update');
         Route::get('orders', 'orders')->name('orders');
         Route::get('order/{id}', 'orderView')->name('order_view');
+    });
+
+    Route::prefix('policies')->controller(PolicyController::class)->name('policy.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('add', 'add')->name('add');
+        Route::post('save', 'save')->name('save');
+        Route::delete('delete/{id}', 'delete')->name('delete');
     });
 
     Route::prefix('categories')->controller(CategoryController::class)->name('category.')->group(function () {

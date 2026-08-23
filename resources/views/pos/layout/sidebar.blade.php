@@ -69,6 +69,17 @@
             <span>Bills</span>
         </a>
 
+        <a href="{{ route('pos.policy') }}"
+            class="sidebar-link {{ request()->routeIs('pos.policy*') ? 'active' : '' }}
+            flex items-center gap-3 px-4 py-3 rounded-xl
+            text-sm font-medium text-slate-600">
+
+          <i class="fas fa-calendar-days w-5 text-center"></i>
+
+            <span>Company Policy</span>
+
+        </a>
+
         <a href="#"
             class="sidebar-link flex items-center gap-3 px-3 py-2.5
                   rounded-xl text-sm font-medium text-slate-600">
@@ -177,6 +188,17 @@
                    text-sm font-medium text-slate-600">
             <i class="fas fa-shopping-cart w-5 text-center"></i>
             <span>Bills</span>
+        </a>
+
+        <a href="{{ route('pos.policy') }}"
+            class="sidebar-link {{ request()->routeIs('pos.policy*') ? 'active' : '' }}
+            flex items-center gap-3 px-4 py-3 rounded-xl
+            text-sm font-medium text-slate-600">
+
+          <i class="fas fa-calendar-days w-5 text-center"></i>
+
+            <span>Company Policy</span>
+
         </a>
 
 

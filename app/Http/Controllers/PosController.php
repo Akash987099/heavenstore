@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\PosOrder;
 use App\Models\Pos;
 use App\Models\PosOrderDetail;
+use App\Models\Policy;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Razorpay\Api\Api;
@@ -19,12 +20,14 @@ class PosController extends Controller
     protected $orderdetails;
     protected $pos;
     protected $user;
+    protected $policy;
 
     public function __construct(){
         $this->product = new Product();
         $this->order   = new PosOrder();
         $this->orderdetails = new PosOrderDetail();
         $this->pos = new Pos();
+        $this->policy = new Policy();
         $this->user = Auth::guard('pos')->user();
     }
     
@@ -784,6 +787,11 @@ class PosController extends Controller
             ->findOrFail($id);
 
         return view('pos.staffs.view', compact('staff'));
+    }
+
+    public function policy(){
+        $policy = $this->policy->get();
+        return view('pos.policy', compact('policy'));
     }
 
 }
