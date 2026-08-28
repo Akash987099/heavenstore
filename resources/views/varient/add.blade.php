@@ -20,7 +20,7 @@
 
                         <div class="col-md-4">
                             <label class="form-label">SKU</label>
-                            <input type="text" name="sku" class="form-control" placeholder="Enter SKU">
+                            <input type="text" name="sku" class="form-control" value="{{$product->sku_product_id}}" placeholder="Enter SKU">
                         </div>
 
                         <div class="col-md-4">
