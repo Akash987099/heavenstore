@@ -13,6 +13,14 @@ class StoreOrder extends Model
         'pos_user_id',
         'order_number',
         'status',
+        'subtotal',
+        'grand_total',
+    ];
+
+    protected $casts = [
+        'status' => 'integer',
+        'subtotal' => 'decimal:2',
+        'grand_total' => 'decimal:2',
     ];
 
     public function items()

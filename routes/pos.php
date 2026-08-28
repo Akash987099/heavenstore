@@ -46,6 +46,7 @@ Route::middleware(['auth:pos'])->group(function () {
         Route::post('/order', 'storeOrder')->name('order');
         Route::get('/orders', 'orders')->name('orders');
         Route::get('/orders/{order}', 'orderView')->name('orders.view');
+        Route::get('/orders/{order}/bill', 'downloadBill')->name('orders.bill');
     });
 
 });

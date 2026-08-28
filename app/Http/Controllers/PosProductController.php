@@ -44,7 +44,7 @@ class PosProductController extends Controller
                 });
             })
             ->latest('id')
-            ->select(['id', 'name', 'image', 'sku_product_id', 'category', 'store_qty'])
+            ->select(['id', 'name', 'image', 'sku_product_id', 'category', 'price', 'store_qty'])
             ->paginate(20);
 
         return response()->json([
@@ -74,7 +74,7 @@ class PosProductController extends Controller
                     ->where('status', 'active')
                     ->whereIn('id', $cart->pluck('id'))
                     ->lockForUpdate()
-                    ->get(['id', 'name', 'store_qty'])
+                    ->get(['id', 'name', 'price', 'store_qty'])
                     ->keyBy('id');
 
                 if ($products->count() !== $cart->count()) {
@@ -90,12 +90,17 @@ class PosProductController extends Controller
                 }
 
                 $posUser = Auth::guard('pos')->user();
+                $subtotal = $cart->sum(function ($item) use ($products) {
+                    return ((float) $products->get($item['id'])->price) * $item['qty'];
+                });
 
                 $order = StoreOrder::create([
                     'pos_user_id' => Auth::guard('pos')->id(),
                     'store_id' => $posUser->store_id,
                     'order_number' => 'STORE-' . now()->format('YmdHis') . '-' . random_int(100, 999),
-                    'status' => 'placed',
+                    'status' => 1,
+                    'subtotal' => $subtotal,
+                    'grand_total' => $subtotal,
                 ]);
 
                 foreach ($cart as $item) {
@@ -106,6 +111,8 @@ class PosProductController extends Controller
                         'product_id' => $product->id,
                         'product_name' => $product->name,
                         'quantity' => $item['qty'],
+                        'price' => $product->price,
+                        'total' => (float) $product->price * $item['qty'],
                     ]);
 
                     $product->decrement('store_qty', $item['qty']);
@@ -113,8 +120,12 @@ class PosProductController extends Controller
 
                 return $order;
             });
-        } catch (\RuntimeException $exception) {
-            return back()->with('error', $exception->getMessage());
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            return back()->with('error', $exception instanceof \RuntimeException
+                ? $exception->getMessage()
+                : 'Store order could not be placed. Please verify the store order database columns.');
         }
 
         return redirect()->route('pos_product.orders.view', $order);
@@ -135,8 +146,29 @@ class PosProductController extends Controller
     {
         abort_unless($order->store_id === Auth::guard('pos')->user()->store_id, 404);
 
-        $order->load(['items.product', 'store', 'posUser']);
+        $this->loadInvoiceAmounts($order);
 
         return view('pos.product.orders.view', compact('order'));
     }
+
+    public function downloadBill(StoreOrder $order)
+    {
+        abort_unless($order->store_id === Auth::guard('pos')->user()->store_id, 404);
+        abort_unless((int) $order->status === 2, 404);
+
+        $this->loadInvoiceAmounts($order);
+
+        return response()
+            ->view('pos.product.orders.bill', compact('order'))
+            ->header('Content-Disposition', 'attachment; filename="' . $order->order_number . '.html"');
+    }
+
+    private function loadInvoiceAmounts(StoreOrder $order): void
+    {
+        $order->load(['items.product', 'store', 'posUser']);
+
+        // Invoice values are read from the saved order-item columns, not products.price.
+        $order->grand_total = $order->items->sum('total');
+    }
+
 }
