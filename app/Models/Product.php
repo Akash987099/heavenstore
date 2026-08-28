@@ -41,6 +41,8 @@ class Product extends Model
         'type',
         'type_value',
         'tax',
+        'is_store',
+        'store_qty'
     ];
 
     public function recommendedProducts()

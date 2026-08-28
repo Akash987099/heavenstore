@@ -202,6 +202,23 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicle_name" class="form-label">Assign Store</label>
+                                    <select type="text" class="form-control" id="assign_store" name="assign_store">
+                                        <option value="0">------Select Types------</option>
+                                        <option value="1">------Assign Store------</option>
+                                    </select>    
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="vehicle_number" class="form-label">Store QTY</label>
+                                    <input type="text" class="form-control" id="store_qty" name="store_qty" value="{{$product->store_qty}}" placeholder="Enter Details">
+                                </div>
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="vehicle_number" class="form-label">Short Description</label>
@@ -253,6 +270,7 @@
                 $('#discount').val('{{ $product->discount }}');
                 $('#summer').val('{{ $product->summer_sale }}');
                 $('#brand').val('{{ $product->brands }}');
+                $('#assign_store').val('{{ $product->is_store }}');
             });
     </script>
 

@@ -277,6 +277,8 @@ class ProductController extends Controller
         $product->type_value = $request->type_value;
         $product->description = $request->description;
         $product->tax = $request->tax;
+        $product->is_store = $request->assign_store;
+        $product->store_qty = $request->store_qty;
         $product->short_description = $request->short_description;
         $product->image = 'product/' . $imageName;
         $product->barcode_base = $barcodeBase64;
@@ -345,6 +347,8 @@ class ProductController extends Controller
         $product->slug = $request->slug;
         $product->description = $request->description;
         $product->tax = $request->tax;
+        $product->is_store = $request->assign_store;
+        $product->store_qty = $request->store_qty;
 
         if ($request->hasFile('image')) {
 

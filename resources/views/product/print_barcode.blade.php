@@ -23,7 +23,7 @@
     @foreach ($products as $item)
         <div class="barcode-box">
 
-            <img src="{{$item->barcode_base}}">
+            <img src="{{ $item->barcode_base }}">
 
         </div>
     @endforeach

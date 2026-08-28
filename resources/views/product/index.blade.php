@@ -37,7 +37,8 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary w-100 mb-0" id="applyBulkBrand">Update Brand</button>
+                                <button type="button" class="btn btn-primary w-100 mb-0" id="applyBulkBrand">Update
+                                    Brand</button>
                             </div>
                             <div class="col-md-4">
                                 <label for="bulk_summer" class="form-label text-xs font-weight-bold">Bulk Summer</label>
@@ -49,10 +50,11 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-info text-white w-100 mb-0" id="applyBulkSummer">Update Summer</button>
+                                <button type="button" class="btn btn-info text-white w-100 mb-0"
+                                    id="applyBulkSummer">Update Summer</button>
                             </div>
 
-                              <div class="col-md-4">
+                            <div class="col-md-4">
                                 <label for="bulk_tax" class="form-label text-xs font-weight-bold">Bulk Tax</label>
                                 <select id="bulk_tax" class="form-control">
                                     <option value="">Select Tax</option>
@@ -62,10 +64,12 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-info text-white w-100 mb-0" id="applyBulkTax">Update Summer</button>
+                                <button type="button" class="btn btn-info text-white w-100 mb-0" id="applyBulkTax">Update
+                                    Summer</button>
                             </div>
                         </div>
-                        <p class="text-xs text-muted mt-2 mb-0">Checkbox se products select karke brand ya summer ek saath update kar sakte hain.</p>
+                        <p class="text-xs text-muted mt-2 mb-0">Checkbox se products select karke brand ya summer ek saath
+                            update kar sakte hain.</p>
                     </div>
                     <div class="table-responsive p-0">
 
@@ -143,15 +147,11 @@
                                             {{-- <p class="text-xs font-weight-bold mb-0">{{ $item->name }}</p> --}}
                                         </td>
 
-                                      <td>
-    <img
-        src="{{ $item->barcode_base }}"
-        alt="Barcode"
-        width="150"
-        class="barcode-preview cursor-pointer rounded border"
-        style="cursor: pointer;"
-    >
-</td>
+                                        <td>
+                                            <img src="{{ $item->barcode_base }}" alt="Barcode" width="150"
+                                                class="barcode-preview cursor-pointer rounded border"
+                                                style="cursor: pointer;">
+                                        </td>
 
                                         <td>
                                             <select name="status"
@@ -167,7 +167,8 @@
                                         </td>
 
                                         <td>
-                                            <select name="status" class="form-control text-xs font-weight-bold select_top">
+                                            <select name="status"
+                                                class="form-control text-xs font-weight-bold select_top">
                                                 <option value="">Select</option>
                                                 <option value="active" data-id="{{ $item->id }}"
                                                     {{ $item->status == 'active' ? 'selected' : '' }}>
@@ -303,7 +304,8 @@
                     <h5 class="modal-title" id="importModalLabel">Import Products</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('product.import') }}" method="POST" enctype="multipart/form-data" id="importForm">
+                <form action="{{ route('product.import') }}" method="POST" enctype="multipart/form-data"
+                    id="importForm">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3 border-bottom pb-3">
@@ -328,7 +330,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="apiImportModal" tabindex="-1" aria-labelledby="apiImportModalLabel" aria-hidden="true">
+    <div class="modal fade" id="apiImportModal" tabindex="-1" aria-labelledby="apiImportModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -343,7 +346,9 @@
                             <select name="client_id" id="client_id" class="form-control" required>
                                 <option value="">Select Client</option>
                                 @foreach ($clients as $client)
-                                    <option value="{{ $client->id }}">{{ $client->name }}{{ $client->company_name ? ' - ' . $client->company_name : '' }}</option>
+                                    <option value="{{ $client->id }}">
+                                        {{ $client->name }}{{ $client->company_name ? ' - ' . $client->company_name : '' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -360,9 +365,8 @@
         </div>
     </div>
 
-   <div
-    id="barcodeModal"
-    style="
+    <div id="barcodeModal"
+        style="
         display:none;
         position:fixed;
         inset:0;
@@ -371,10 +375,9 @@
         align-items:center;
         justify-content:center;
         padding:20px;
-    "
->
-    <div
-        style="
+    ">
+        <div
+            style="
             position:relative;
             background:#fff;
             padding:35px 40px;
@@ -386,14 +389,11 @@
             align-items:center;
             justify-content:center;
             box-shadow:0 10px 40px rgba(0,0,0,0.3);
-        "
-    >
+        ">
 
-        <!-- Close -->
-        <button
-            type="button"
-            id="closeBarcodeModal"
-            style="
+            <!-- Close -->
+            <button type="button" id="closeBarcodeModal"
+                style="
                 position:absolute;
                 top:-15px;
                 right:-15px;
@@ -407,77 +407,72 @@
                 cursor:pointer;
                 box-shadow:0 2px 10px rgba(0,0,0,.3);
                 z-index:2;
-            "
-        >
-            &times;
-        </button>
+            ">
+                &times;
+            </button>
 
-        <!-- Barcode -->
-        <img
-            id="barcodeLargeImage"
-            src=""
-            alt="Barcode"
-            style="
+            <!-- Barcode -->
+            <img id="barcodeLargeImage" src="" alt="Barcode"
+                style="
                 width:700px;
                 height:300px;
                 max-width:90vw;
                 object-fit:contain;
                 image-rendering:auto;
-            "
-        >
+            ">
 
+        </div>
     </div>
-</div>
 
-<script>
-$(document).on('click', '.barcode-preview', function () {
+    <script>
+        $(document).on('click', '.barcode-preview', function() {
 
-    let imageSrc = $(this).attr('src');
+            let imageSrc = $(this).attr('src');
 
-    console.log('Barcode clicked:', imageSrc);
+            console.log('Barcode clicked:', imageSrc);
 
-    if (!imageSrc) {
-        return;
-    }
+            if (!imageSrc) {
+                return;
+            }
 
-    $('#barcodeLargeImage').attr('src', imageSrc);
+            $('#barcodeLargeImage').attr('src', imageSrc);
 
-    $('#barcodeModal').css('display', 'flex');
-});
-
-
-$('#closeBarcodeModal').on('click', function () {
-
-    $('#barcodeModal').css('display', 'none');
-
-    $('#barcodeLargeImage').attr('src', '');
-
-});
+            $('#barcodeModal').css('display', 'flex');
+        });
 
 
-$('#barcodeModal').on('click', function (e) {
+        $('#closeBarcodeModal').on('click', function() {
 
-    if (e.target === this) {
+            $('#barcodeModal').css('display', 'none');
 
-        $(this).css('display', 'none');
+            $('#barcodeLargeImage').attr('src', '');
 
-        $('#barcodeLargeImage').attr('src', '');
-    }
-
-});
+        });
 
 
-$(document).on('keydown', function (e) {
+        $('#barcodeModal').on('click', function(e) {
 
-    if (e.key === 'Escape') {
+            if (e.target === this) {
 
-        $('#barcodeModal').css('display', 'none');
+                $(this).css('display', 'none');
 
-        $('#barcodeLargeImage').attr('src', '');
-    }
+                $('#barcodeLargeImage').attr('src', '');
+            }
 
-});
-</script>
+        });
+
+
+        $(document).on('keydown', function(e) {
+
+            if (e.key === 'Escape') {
+
+                $('#barcodeModal').css('display', 'none');
+
+                $('#barcodeLargeImage').attr('src', '');
+            }
+
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
