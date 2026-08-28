@@ -10,6 +10,8 @@ use App\Models\PosOrder;
 use App\Models\PosOrderDetail;
 use App\Models\Product;
 use Illuminate\Support\Facades\Hash;
+use App\Models\StoreOrder;
+use App\Models\StoreOrderItem;
 
 class PosUserController extends Controller
 {
@@ -143,5 +145,44 @@ class PosUserController extends Controller
             'posuser.order-bill',
             compact('order')
         );
+    }
+
+    public function storeOrder(){
+        $orders = StoreOrder::query()
+            ->with(['store', 'posUser'])
+            ->withCount('items')
+            ->latest('id')
+            ->paginate(config('constants.pagination_limit'));
+
+        return view('posuser.store_order', compact('orders'));
+    }
+
+    public function storeOrderView(StoreOrder $order)
+    {
+        $order->load(['items.product', 'store', 'posUser']);
+
+        return view('posuser.store_order_view', compact('order'));
+    }
+
+    public function updateStoreOrderStatus(Request $request, StoreOrder $order)
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'integer', 'in:1,2'],
+        ]);
+
+        $order->update(['status' => $validated['status']]);
+
+        return back()->with('success', 'Store order status updated successfully.');
+    }
+
+    public function downloadStoreOrderInvoice(StoreOrder $order)
+    {
+        abort_unless((int) $order->status === 2, 404);
+
+        $order->load(['items.product', 'store', 'posUser']);
+
+        return response()
+            ->view('pos.product.orders.bill', compact('order'))
+            ->header('Content-Disposition', 'attachment; filename="' . $order->order_number . '.html"');
     }
 }

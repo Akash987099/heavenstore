@@ -100,6 +100,13 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('update', 'update')->name('update');
         Route::get('orders', 'orders')->name('orders');
         Route::get('order/{id}', 'orderView')->name('order_view');
+
+        // pos Products Order
+
+        Route::get('store/order', 'storeOrder')->name('store-order');
+        Route::get('store/order/{order}', 'storeOrderView')->name('store-order.view');
+        Route::post('store/order/{order}/status', 'updateStoreOrderStatus')->name('store-order.status');
+        Route::get('store/order/{order}/invoice', 'downloadStoreOrderInvoice')->name('store-order.invoice');
     });
 
     Route::prefix('policies')->controller(PolicyController::class)->name('policy.')->group(function () {

@@ -1734,6 +1734,8 @@
                             <a class="nav-link {{ request()->routeIs('pos_user.*') ? 'active' : '' }}"
                                 href="{{ route('pos_user.index') }}"><i class="fas fa-user"></i>Pos</a>
                             <a class="nav-link {{ request()->routeIs('pos_user.*') ? 'active' : '' }}"
+                                href="{{ route('pos_user.store-order') }}"><i class="fas fa-user"></i>Orders</a>
+                            <a class="nav-link {{ request()->routeIs('pos_user.*') ? 'active' : '' }}"
                                 href="{{ route('pos_user.orders') }}"><i class="fas fa-user"></i>Pos Orders</a>
                         </div>
                     </div>
