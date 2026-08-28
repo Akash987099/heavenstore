@@ -5,6 +5,7 @@ use App\Http\Controllers\pos\ProductController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\PosLeaveController;
+use App\Http\Controllers\PosProductController;
 
 Route::middleware(['auth:pos'])->group(function () {
     Route::controller(PosController::class)->name('pos.')->group(function () {
@@ -38,4 +39,13 @@ Route::middleware(['auth:pos'])->group(function () {
         Route::get('view/{id}', 'view')->name('view');
         Route::post('/{id}/status', 'updateStatus')->name('status');
     });
+
+    Route::prefix('product')->controller(PosProductController::class)->name('pos_product.')->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/list', 'products')->name('list');
+        Route::post('/order', 'storeOrder')->name('order');
+        Route::get('/orders', 'orders')->name('orders');
+        Route::get('/orders/{order}', 'orderView')->name('orders.view');
+    });
+
 });

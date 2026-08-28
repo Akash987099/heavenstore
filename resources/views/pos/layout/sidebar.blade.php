@@ -69,6 +69,26 @@
             <span>Bills</span>
         </a>
 
+        <a href="{{ route('pos_product.index') }}"
+            class="sidebar-link {{ request()->routeIs('pos_product.index*') ? 'active' : '' }}
+                  flex items-center gap-3 px-3 py-2.5 rounded-xl
+                  text-sm font-medium text-slate-600">
+
+            <i class="fas fa-table w-5 text-center"></i>
+
+            <span>Products</span>
+        </a>
+
+        <a href="{{ route('pos_product.orders') }}"
+            class="sidebar-link {{ request()->routeIs('pos_product.orders*') ? 'active' : '' }}
+                  flex items-center gap-3 px-3 py-2.5 rounded-xl
+                  text-sm font-medium text-slate-600">
+
+            <i class="fas fa-truck w-5 text-center"></i>
+
+            <span>Store Orders</span>
+        </a>
+
         <a href="{{ route('pos.policy') }}"
             class="sidebar-link {{ request()->routeIs('pos.policy*') ? 'active' : '' }}
             flex items-center gap-3 px-4 py-3 rounded-xl
@@ -188,6 +208,14 @@
                    text-sm font-medium text-slate-600">
             <i class="fas fa-shopping-cart w-5 text-center"></i>
             <span>Bills</span>
+        </a>
+
+        <a href="{{ route('pos_product.orders') }}"
+            class="sidebar-link {{ request()->routeIs('pos_product.orders*') ? 'active' : '' }}
+                   flex items-center gap-3 px-4 py-3 rounded-xl
+                   text-sm font-medium text-slate-600">
+            <i class="fas fa-truck w-5 text-center"></i>
+            <span>Store Orders</span>
         </a>
 
         <a href="{{ route('pos.policy') }}"
