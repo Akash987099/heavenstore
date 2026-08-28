@@ -12,6 +12,8 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Hash;
 use App\Models\StoreOrder;
 use App\Models\StoreOrderItem;
+use App\Models\StoreProduct;
+use Illuminate\Support\Facades\DB;
 
 class PosUserController extends Controller
 {
@@ -167,12 +169,60 @@ class PosUserController extends Controller
     public function updateStoreOrderStatus(Request $request, StoreOrder $order)
     {
         $validated = $request->validate([
-            'status' => ['required', 'integer', 'in:1,2'],
+            'status' => ['required', 'integer', 'in:2'],
         ]);
 
-        $order->update(['status' => $validated['status']]);
+        try {
+            DB::transaction(function () use ($order, $validated) {
+                $order = StoreOrder::query()
+                    ->with('items')
+                    ->lockForUpdate()
+                    ->findOrFail($order->id);
 
-        return back()->with('success', 'Store order status updated successfully.');
+                // A delivered order must never be processed twice.
+                if ((int) $order->status === 2) {
+                    return;
+                }
+
+                foreach ($order->items as $item) {
+                    $product = Product::query()
+                        ->lockForUpdate()
+                        ->findOrFail($item->product_id);
+
+                    if ((int) $product->store_qty < $item->quantity) {
+                        throw new \RuntimeException($product->name . ' has insufficient company stock for delivery.');
+                    }
+
+                    $storeProduct = StoreProduct::query()
+                        ->where('store_id', $order->store_id)
+                        ->where('product_id', $item->product_id)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if ($storeProduct) {
+                        $storeProduct->increment('qty', $item->quantity);
+                    } else {
+                        StoreProduct::create([
+                            'store_id' => $order->store_id,
+                            'product_id' => $item->product_id,
+                            'qty' => $item->quantity,
+                        ]);
+                    }
+
+                    $product->decrement('store_qty', $item->quantity);
+                }
+
+                $order->update(['status' => $validated['status']]);
+            });
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            return back()->with('error', $exception instanceof \RuntimeException
+                ? $exception->getMessage()
+                : 'Store order could not be marked as delivered.');
+        }
+
+        return back()->with('success', 'Store order delivered and stock added to the store successfully.');
     }
 
     public function downloadStoreOrderInvoice(StoreOrder $order)

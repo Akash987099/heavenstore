@@ -42,6 +42,7 @@ Route::middleware(['auth:pos'])->group(function () {
 
     Route::prefix('product')->controller(PosProductController::class)->name('pos_product.')->group(function() {
         Route::get('/', 'index')->name('index');
+        Route::get('/stock', 'stock')->name('stock');
         Route::get('/list', 'products')->name('list');
         Route::post('/order', 'storeOrder')->name('order');
         Route::get('/orders', 'orders')->name('orders');

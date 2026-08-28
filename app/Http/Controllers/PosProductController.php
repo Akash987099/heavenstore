@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\StoreOrder;
 use App\Models\StoreOrderItem;
+use App\Models\StoreProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -51,6 +52,17 @@ class PosProductController extends Controller
             'products' => $products->items(),
             'next_page' => $products->hasMorePages() ? $products->currentPage() + 1 : null,
         ]);
+    }
+
+    public function stock()
+    {
+        $storeProducts = StoreProduct::query()
+            ->with(['product:id,name,image,sku_product_id'])
+            ->where('store_id', Auth::guard('pos')->user()->store_id)
+            ->orderBy('qty')
+            ->paginate(20);
+
+        return view('pos.product.stock', compact('storeProducts'));
     }
 
     public function storeOrder(Request $request)
@@ -115,7 +127,6 @@ class PosProductController extends Controller
                         'total' => (float) $product->price * $item['qty'],
                     ]);
 
-                    $product->decrement('store_qty', $item['qty']);
                 }
 
                 return $order;

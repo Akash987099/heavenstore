@@ -8,6 +8,7 @@ use App\Models\PosOrder;
 use App\Models\Pos;
 use App\Models\PosOrderDetail;
 use App\Models\Policy;
+use App\Models\StoreProduct;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Razorpay\Api\Api;
@@ -85,6 +86,18 @@ class PosController extends Controller
             ->whereIn('pos_user_id', $userIDs)
             ->count();
 
+        // Store stock is shown in ascending quantity order so low-stock products appear first.
+        $storeProducts = StoreProduct::query()
+            ->with(['product:id,name,image,sku_product_id'])
+            ->where('store_id', $user->store_id)
+            ->orderBy('qty')
+            ->paginate(20, ['*'], 'stock_page');
+
+        $lowStockCount = StoreProduct::query()
+            ->where('store_id', $user->store_id)
+            ->where('qty', '<=', 5)
+            ->count();
+
 
         return view(
             'pos.index',
@@ -92,7 +105,9 @@ class PosController extends Controller
                 'todayorder',
                 'thisweek',
                 'thismonth',
-                'totalorder'
+                'totalorder',
+                'storeProducts',
+                'lowStockCount'
             )
         );
     }
