@@ -90,6 +90,9 @@
                                         Barcode</th>
 
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Image</th>
+
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Summer</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Status</th>
@@ -150,6 +153,12 @@
                                         <td>
                                             <img src="{{ $item->barcode_base }}" alt="Barcode" width="150"
                                                 class="barcode-preview cursor-pointer rounded border"
+                                                style="cursor: pointer;">
+                                        </td>
+
+                                        <td>
+                                            <img src="{{ asset($item->image) }}" alt="Barcode" width="150"
+                                                class="cursor-pointer rounded border"
                                                 style="cursor: pointer;">
                                         </td>
 
