@@ -155,7 +155,7 @@
                                                 class="barcode-preview cursor-pointer rounded border"
                                                 style="cursor: pointer;">
                                         </td>
-// nn
+                                        
                                         <td>
                                             <img src="{{ asset($item->image) }}" alt="Barcode" width="150"
                                                 class="cursor-pointer rounded border"
